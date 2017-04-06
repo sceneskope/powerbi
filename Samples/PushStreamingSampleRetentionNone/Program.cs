@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace StreamingSample
+namespace PushStreamingSampleRetentionNone
 {
     internal static class Program
     {
@@ -17,7 +17,7 @@ namespace StreamingSample
         {
             if (args.Length != 1)
             {
-                Console.WriteLine("usage: StreamingSample <configuration file>");
+                Console.WriteLine("usage: PushStreamingSample <configuration file>");
             }
             else
             {
@@ -60,7 +60,7 @@ namespace StreamingSample
                 string datasetId;
                 if (existingDataset == null)
                 {
-                    var created = await powerBIClient.CreateDatasetAsync(dataset, DefaultRetentionPolicy.basicFifo, ct).ConfigureAwait(false);
+                    var created = await powerBIClient.CreateDatasetAsync(dataset, DefaultRetentionPolicy.None, ct).ConfigureAwait(false);
                     datasetId = created.Id;
                 }
                 else
@@ -88,13 +88,13 @@ namespace StreamingSample
         private static Dataset CreateDatasetDefinition() =>
             new Dataset
             {
-                DefaultMode = DatasetMode.Streaming,
-                Name = "StreamingDataset",
+                DefaultMode = DatasetMode.PushStreaming,
+                Name = "PushStreamingDatasetRetentionNone",
                 Tables = new[]
                 {
                     new Table
                     {
-                        Name = "StreamingTable",
+                        Name = "PushStreamingTableRetentionNone",
                         Columns = new[]
                         {
                             new Column { Name = "TimestampUtc", DataType = DataType.DateTime },

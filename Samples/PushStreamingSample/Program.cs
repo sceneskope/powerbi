@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace StreamingSample
+namespace PushStreamingSample
 {
     internal static class Program
     {
@@ -17,7 +17,7 @@ namespace StreamingSample
         {
             if (args.Length != 1)
             {
-                Console.WriteLine("usage: StreamingSample <configuration file>");
+                Console.WriteLine("usage: PushStreamingSample <configuration file>");
             }
             else
             {
@@ -88,13 +88,13 @@ namespace StreamingSample
         private static Dataset CreateDatasetDefinition() =>
             new Dataset
             {
-                DefaultMode = DatasetMode.Streaming,
-                Name = "StreamingDataset",
+                DefaultMode = DatasetMode.PushStreaming,
+                Name = "PushStreamingDataset",
                 Tables = new[]
                 {
                     new Table
                     {
-                        Name = "StreamingTable",
+                        Name = "PushStreamingTable",
                         Columns = new[]
                         {
                             new Column { Name = "TimestampUtc", DataType = DataType.DateTime },

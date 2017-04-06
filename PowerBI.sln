@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamingSample", "Samples\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{810272B1-0E34-4327-8A97-B031B2F0A85A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PushStreamingSample", "Samples\PushStreamingSample\PushStreamingSample.csproj", "{0F992BE3-5B06-471C-B87A-5C528F39000A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PushStreamingSampleRetentionNone", "Samples\PushStreamingSampleRetentionNone\PushStreamingSampleRetentionNone.csproj", "{CC0DBCD6-1860-4D44-B728-561A89E450A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,11 +47,21 @@ Global
 		{C950FCCF-FB8E-4402-92F6-7642B8B078B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C950FCCF-FB8E-4402-92F6-7642B8B078B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C950FCCF-FB8E-4402-92F6-7642B8B078B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F992BE3-5B06-471C-B87A-5C528F39000A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F992BE3-5B06-471C-B87A-5C528F39000A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F992BE3-5B06-471C-B87A-5C528F39000A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F992BE3-5B06-471C-B87A-5C528F39000A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC0DBCD6-1860-4D44-B728-561A89E450A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC0DBCD6-1860-4D44-B728-561A89E450A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC0DBCD6-1860-4D44-B728-561A89E450A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC0DBCD6-1860-4D44-B728-561A89E450A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C950FCCF-FB8E-4402-92F6-7642B8B078B8} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
+		{0F992BE3-5B06-471C-B87A-5C528F39000A} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
+		{CC0DBCD6-1860-4D44-B728-561A89E450A7} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
 	EndGlobalSection
 EndGlobal
