@@ -20,7 +20,30 @@ namespace SceneSkope.PowerBI
         public string ResourceUri { get; set; } = "https://analysis.windows.net/powerbi/api";
 
         private const string DefaultBaseUrl = "https://api.powerbi.com/v1.0/myorg";
+        private const string BetaBaseUrl = "https://api.powerbi.com/beta/myorg";
+
         public string BaseUrl { get; set; } = DefaultBaseUrl;
+
+        public bool UseBeta
+        {
+            get => BaseUrl.StartsWith(BetaBaseUrl);
+            set
+            {
+                if (value)
+                {
+                    if (BaseUrl.StartsWith(DefaultBaseUrl))
+                    {
+                        BaseUrl = BaseUrl.Replace(DefaultBaseUrl, BetaBaseUrl);
+                    }
+                } else
+                {
+                    if (BaseUrl.StartsWith(BetaBaseUrl))
+                    {
+                        BaseUrl = BaseUrl.Replace(BetaBaseUrl, DefaultBaseUrl);
+                    }
+                }
+            }
+        }
 
         private static readonly JsonSerializerSettings _settings = CreateSettings();
         private static JsonSerializerSettings CreateSettings()
@@ -169,6 +192,7 @@ namespace SceneSkope.PowerBI
 
         public async Task<PowerBIIdentity[]> ListAllDatasetsAsync(CancellationToken ct)
         {
+            Console.WriteLine($"Using BaseURL {BaseUrl}");
             using (var request = new HttpRequestMessage(HttpMethod.Get, $"{BaseUrl}/datasets"))
             {
                 var response = await AuthenticateSendRequestAndDecodeResultAsync<PowerBIResult<PowerBIIdentity>>(request, ct).ConfigureAwait(false);
