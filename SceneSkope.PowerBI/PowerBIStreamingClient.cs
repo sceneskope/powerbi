@@ -22,7 +22,6 @@ namespace SceneSkope.PowerBI
         public async Task AddRowsAsync(object[] rows, CancellationToken ct)
         {
             var json = JsonConvert.SerializeObject(rows, _dataSettings);
-            Console.WriteLine("Adding {0}", json);
             using (var request = new HttpRequestMessage(HttpMethod.Post, Url)
             {
                 Content = new StringContent(json, Encoding.UTF8, "application/json")

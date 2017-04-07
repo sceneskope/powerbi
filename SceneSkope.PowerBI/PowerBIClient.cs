@@ -59,7 +59,6 @@ namespace SceneSkope.PowerBI
         public async Task AddRowsAsync(string datasetId, string tableName, object[] rows, long? sequenceNumber, CancellationToken ct)
         {
             var json = JsonConvert.SerializeObject(new { Rows = rows }, _dataSettings);
-            Console.WriteLine($"Adding {json}");
             using (var request = new HttpRequestMessage(HttpMethod.Post, $"{BaseUrl}/datasets/{datasetId}/tables/{tableName}/rows")
             {
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
@@ -109,7 +108,6 @@ namespace SceneSkope.PowerBI
 
         public async Task<PowerBIIdentity[]> ListAllDatasetsAsync(CancellationToken ct)
         {
-            Console.WriteLine($"Using BaseURL {BaseUrl}");
             using (var request = new HttpRequestMessage(HttpMethod.Get, $"{BaseUrl}/datasets"))
             {
                 var response = await AuthenticateSendRequestAndDecodeResultAsync<PowerBIResult<PowerBIIdentity>>(request, ct).ConfigureAwait(false);

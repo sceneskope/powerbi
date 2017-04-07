@@ -53,7 +53,6 @@ namespace SceneSkope.PowerBI
         protected async Task CheckForFailureAndLogIfRequired(HttpResponseMessage response)
         {
             var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            Console.WriteLine($"{response.StatusCode} {response.ReasonPhrase} {result}");
             if (!response.IsSuccessStatusCode)
             {
                 response.EnsureSuccessStatusCode();
