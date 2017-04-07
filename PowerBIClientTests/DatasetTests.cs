@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace PowerBITests
+namespace PowerBIClientTests
 {
     public class DatasetTests : IClassFixture<TestContext>
     {

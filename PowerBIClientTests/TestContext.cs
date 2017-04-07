@@ -3,21 +3,24 @@ using SceneSkope.PowerBI;
 using System;
 using System.IO;
 using System.Net.Http;
+using SceneSkope.PowerBI.Authenticators;
 
-namespace PowerBITests
+namespace PowerBIClientTests
 {
     public class TestContext : IDisposable
     {
         public HttpClient HttpClient { get; } = new HttpClient();
 
+        private readonly DeviceCodeAuthenticator _authenticator;
+
+        public ClientConfiguration ClientConfiguration { get; }
+
         public void Dispose() => HttpClient.Dispose();
 
-        public PowerBIClient CreateClient() =>
-            new PowerBIClient(_clientConfiguration.ClientId, HttpClient, _clientConfiguration.TokenCacheState);
+        public PowerBIClient CreateClient(IAuthenticator authenticator = null) =>
+            new PowerBIClient(HttpClient, authenticator ?? _authenticator);
 
         private const string TestConfigurationFileName = @"..\..\..\..\PowerBIClientTesting.json";
-
-        private readonly ClientConfiguration _clientConfiguration;
 
         public TestContext()
         {
@@ -27,7 +30,8 @@ namespace PowerBITests
                 throw new InvalidOperationException($"Unable to find configuration file {configFile.FullName}");
             }
 
-            _clientConfiguration = JsonConvert.DeserializeObject<ClientConfiguration>(File.ReadAllText(TestConfigurationFileName));
+            ClientConfiguration = JsonConvert.DeserializeObject<ClientConfiguration>(File.ReadAllText(TestConfigurationFileName));
+            _authenticator = new DeviceCodeAuthenticator(ClientConfiguration.ClientId, ClientConfiguration.TokenCacheState);
         }
     }
 }
