@@ -9,8 +9,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		build.ps1 = build.ps1
 		LICENSE = LICENSE
 		README.md = README.md
+		semver.txt = semver.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetDeviceCode", "GetDeviceCode\GetDeviceCode.csproj", "{46A84200-F5F1-4E90-A688-91CAB1DF2C15}"
