@@ -25,7 +25,7 @@ namespace PowerBIClientTests
             Assert.NotNull(datasets);
         }
 
-        [Fact]
+        [Fact(Skip="Groups not in permissions")]
         public async Task TestListGroups()
         {
             var client = _context.CreateClient();
@@ -33,7 +33,7 @@ namespace PowerBIClientTests
             Assert.NotNull(groups);
         }
 
-        [Fact]
+        [Fact(Skip = "Groups not in permissions")]
         public async Task TestCreateGroupDataset()
         {
             var client = _context.CreateClient();
