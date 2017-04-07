@@ -36,7 +36,7 @@ if ($CreatePackages) {
     mkdir -Force $packageOutputFolder | Out-Null
 
     Get-ChildItem $packageOutputFolder | Remove-Item
-    dotnet pack --no-build -c Release "/p:Version=$version"
+    dotnet pack --no-build --output $packageOutputFolder -c Release "/p:Version=$version" 
 }
 Write-Host "Complete"
 
