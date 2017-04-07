@@ -1,0 +1,17 @@
+image: Visual Studio 2017
+
+build_script:
+- ps: .\build.ps1 -BuildNumber "$env:APPVEYOR_BUILD_NUMBER"
+
+test: off
+
+artifacts:
+- path: .\nupkgs\*.nupkg
+
+deploy:
+- provider: NuGet
+  api_key:
+    secure: eaiytjZ8451bGqdim49VhzfsYNDviMmEm/lMbc34oqmznMUEb0BW/9/yFckWyzf1
+  on:
+    branch: master
+    

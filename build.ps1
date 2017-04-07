@@ -12,6 +12,7 @@ Write-Host "RunTests: $RunTests"
 Get-ChildItem -Recurse -Filter bin | Remove-Item -Recurse
 Get-ChildItem -Recurse -Filter obj | Remove-Item -Recurse
 
+$packageOutputFolder = "$PSScriptRoot\.nupkgs"
 
 $semVer = Get-Content (Join-Path $PSScriptRoot "semver.txt")
 $version = "$semVer-$BuildNumber"
@@ -32,6 +33,9 @@ dotnet build -c Release "/p:Version=$version"
 
 if ($CreatePackages) {
     Write-Host "Packing"
+    mkdir -Force $packageOutputFolder | Out-Null
+
+    Get-ChildItem $packageOutputFolder | Remove-Item
     dotnet pack --no-build -c Release "/p:Version=$version"
 }
 Write-Host "Complete"
