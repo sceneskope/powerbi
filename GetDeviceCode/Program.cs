@@ -6,6 +6,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using SceneSkope.PowerBI.Authenticators;
 
 namespace GetDeviceCode
 {
@@ -38,17 +39,14 @@ namespace GetDeviceCode
 
         private static async Task RunAsync(string clientId, string outputFile, CancellationToken ct)
         {
-            using (var httpClient = new HttpClient())
-            {
-                var powerBiClient = new PowerBIClient(clientId, httpClient,
-                    (url, deviceCode) => Console.WriteLine($"Go to {url} and enter device code {deviceCode}"));
+            var authenticator = new DeviceCodeAuthenticator(clientId,
+                (url, deviceCode) => Console.WriteLine($"Go to {url} and enter device code {deviceCode}"));
 
-                await powerBiClient.GetAccessTokenAsync(ct).ConfigureAwait(false);
-                var state = powerBiClient.GetSerializedState();
+            await authenticator.GetAccessTokenAsync(ct).ConfigureAwait(false);
+            var state = authenticator.GetSerializedState();
 
-                var clientConfiguration = new ClientConfiguration { ClientId = clientId, TokenCacheState = state };
-                File.WriteAllText(outputFile, JsonConvert.SerializeObject(clientConfiguration));
-            }
+            var clientConfiguration = new ClientConfiguration { ClientId = clientId, TokenCacheState = state };
+            File.WriteAllText(outputFile, JsonConvert.SerializeObject(clientConfiguration));
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using SceneSkope.PowerBI.Authenticators;
 
 namespace PushStreamingSampleRetentionNone
 {
@@ -50,7 +51,8 @@ namespace PushStreamingSampleRetentionNone
             using (var httpClient = new HttpClient())
             {
                 var configuration = JsonConvert.DeserializeObject<ClientConfiguration>(File.ReadAllText(configurationFile));
-                var powerBIClient = new PowerBIClient(configuration.ClientId, httpClient, configuration.TokenCacheState)
+                var authenticator = new DeviceCodeAuthenticator(configuration.ClientId, configuration.TokenCacheState);
+                var powerBIClient = new PowerBIClient(httpClient, authenticator)
                 {
                     UseBeta = true
                 };
