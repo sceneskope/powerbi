@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PushStreamingSampleRetentio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamingUISample", "Samples\StreamingUISample\StreamingUISample.csproj", "{97EB7E41-2845-4B5B-9BA3-313C6205067D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiTableExample", "Samples\MultiTableExample\MultiTableExample.csproj", "{68707EF6-56F3-4AFE-A405-5133FC3A380F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{97EB7E41-2845-4B5B-9BA3-313C6205067D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97EB7E41-2845-4B5B-9BA3-313C6205067D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97EB7E41-2845-4B5B-9BA3-313C6205067D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68707EF6-56F3-4AFE-A405-5133FC3A380F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68707EF6-56F3-4AFE-A405-5133FC3A380F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68707EF6-56F3-4AFE-A405-5133FC3A380F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68707EF6-56F3-4AFE-A405-5133FC3A380F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,5 +78,6 @@ Global
 		{0F992BE3-5B06-471C-B87A-5C528F39000A} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
 		{CC0DBCD6-1860-4D44-B728-561A89E450A7} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
 		{97EB7E41-2845-4B5B-9BA3-313C6205067D} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
+		{68707EF6-56F3-4AFE-A405-5133FC3A380F} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
 	EndGlobalSection
 EndGlobal
