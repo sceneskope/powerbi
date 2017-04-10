@@ -45,17 +45,20 @@ namespace SceneSkope.PowerBI
             {
                 await CheckForFailureAndLogIfRequired(response).ConfigureAwait(false);
                 var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                var decoded = JsonConvert.DeserializeObject<T>(json);
-                return decoded;
+                return JsonConvert.DeserializeObject<T>(json);
             }
         }
 
         protected async Task CheckForFailureAndLogIfRequired(HttpResponseMessage response)
         {
-            var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
             {
-                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                if (response.Content != null)
+                {
+                    response.Content.Dispose();
+                }
+                throw new PowerBIClientException(response.StatusCode, response.ReasonPhrase, result);
             }
         }
 
