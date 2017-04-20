@@ -25,7 +25,7 @@ if ($BuildNumber -eq "dev") {
 	$version = "$semVer-dev-$autoVersion"
 	$configuration = "Debug"
 } else {
-	$version = "$semVer.$BuildNumber"
+	$version = "$semVer$BuildNumber"
 	$configuration = "Release"
 }
 
