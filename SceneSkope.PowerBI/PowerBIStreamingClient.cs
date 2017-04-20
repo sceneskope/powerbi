@@ -10,6 +10,12 @@ namespace SceneSkope.PowerBI
 {
     public class PowerBIStreamingClient : BasePowerBIClient
     {
+#if NETSTANDARD1_4
+        private static readonly Task CompletedTask = Task.CompletedTask;
+#else
+        private static readonly Task CompletedTask = Task.FromResult(true);
+#endif
+
         public string Url { get; }
 
         public PowerBIStreamingClient(string url, HttpClient client) : base(client)
@@ -17,7 +23,7 @@ namespace SceneSkope.PowerBI
             Url = url;
         }
 
-        protected override Task AuthenticateRequestAsync(HttpRequestMessage request, CancellationToken ct) => Task.CompletedTask;
+        protected override Task AuthenticateRequestAsync(HttpRequestMessage request, CancellationToken ct) => CompletedTask;
 
         public async Task AddRowsAsync(object[] rows, CancellationToken ct)
         {

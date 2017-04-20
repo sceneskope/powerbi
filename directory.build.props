@@ -1,0 +1,7 @@
+﻿<Project>
+  <PropertyGroup>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>embedded</DebugType>
+    <IncludeSymbols>false</IncludeSymbols>
+  </PropertyGroup>
+</Project>

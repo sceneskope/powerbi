@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace SceneSkope.PowerBI
 {
@@ -54,10 +51,7 @@ namespace SceneSkope.PowerBI
             if (!response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                if (response.Content != null)
-                {
-                    response.Content.Dispose();
-                }
+                response.Content?.Dispose();
                 throw new PowerBIClientException(response.StatusCode, response.ReasonPhrase, result);
             }
         }
