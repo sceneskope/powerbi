@@ -20,27 +20,52 @@ Get-ChildItem -Recurse -Filter obj | Remove-Item -Recurse
 $packageOutputFolder = "$PSScriptRoot\.nupkgs"
 
 $semVer = Get-Content (Join-Path $PSScriptRoot "semver.txt")
+if ($semVer.Contains("-")) {
+    if (-not $semVer.EndsWith("-")) {
+        throw "Semver with a dash should end in dash"
+    }
+}
+else {
+    if (-not $semVer.EndsWith(".")) {
+        throw "Semver should end with a dot"
+    }
+}
+
 if ($BuildNumber -eq "dev") {
-	$autoVersion = [math]::floor((New-TimeSpan $(Get-Date) $(Get-Date -month 1 -day 1 -year 2016 -hour 0 -minute 0 -second 0)).TotalMinutes * -1).ToString() + "-" + (Get-Date).ToString("ss")
-	$version = "$semVer-dev-$autoVersion"
-	$configuration = "Debug"
-} else {
-	$version = "$semVer$BuildNumber"
-	$configuration = "Release"
+    $semVer = $semVer.Substring(0, $semVer.Length - 1)
+    $autoVersion = [math]::floor((New-TimeSpan $(Get-Date) $(Get-Date -month 1 -day 1 -year 2016 -hour 0 -minute 0 -second 0)).TotalMinutes * -1).ToString() + "-" + (Get-Date).ToString("ss")
+    $version = "$semVer-dev-$autoVersion"
+    $configuration = "Debug"
+}
+else {
+    $version = "$semVer$BuildNumber"
+    $configuration = "Release"
 }
 
 Write-Host "Restore"
 dotnet restore "/p:Version=$version"
+if ($LastExitCode -ne 0) { 
+    Write-Host "Error with restore, aborting build." -Foreground "Red"
+    Exit 1
+}
 
 if ($RunTests) {
     Write-Host "Running tests"
     Push-Location "$PSScriptRoot\PowerBIClientTests\"
     dotnet test "/p:Version=$version"
+    if ($LastExitCode -ne 0) { 
+            Write-Host "Error with test, aborting build." -Foreground "Red"
+            Exit 1
+    }
     Pop-Location
 }
 
 Write-Host "Building"
 dotnet build -c $configuration "/p:Version=$version"
+if ($LastExitCode -ne 0) { 
+    Write-Host "Error with build, aborting build." -Foreground "Red"
+    Exit 1
+}
 
 
 if ($CreatePackages) {
@@ -49,9 +74,13 @@ if ($CreatePackages) {
 
     Get-ChildItem $packageOutputFolder | Remove-Item
     dotnet pack --no-build --output $packageOutputFolder -c $configuration "/p:Version=$version" 
-	if ($CopyLocal) {
-		Copy-Item -Path "$packageOutputFolder\*.nupkg" -Destination "$env:HOME\Source\Packages"
-	}
+    if ($LastExitCode -ne 0) { 
+        Write-Host "Error with pack, aborting build." -Foreground "Red"
+        Exit 1
+    }
+    if ($CopyLocal) {
+        Copy-Item -Path "$packageOutputFolder\*.nupkg" -Destination "$env:HOME\Source\Packages"
+    }
 }
 Write-Host "Complete"
 
