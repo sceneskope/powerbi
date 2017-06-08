@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SceneSkope.PowerBI.Models;
+using System.Collections.Generic;
 
 namespace SceneSkope.PowerBI
 {
@@ -53,10 +54,10 @@ namespace SceneSkope.PowerBI
                 BaseUrl = $"{BaseUrl}/groups/{id}"
             };
 
-        public Task AddRowsAsync(string datasetId, string tableName, object[] rows, CancellationToken ct) =>
+        public Task AddRowsAsync<T>(string datasetId, string tableName, IReadOnlyList<T> rows, CancellationToken ct) =>
             AddRowsAsync(datasetId, tableName, rows, null, ct);
 
-        public async Task AddRowsAsync(string datasetId, string tableName, object[] rows, long? sequenceNumber, CancellationToken ct)
+        public async Task AddRowsAsync<T>(string datasetId, string tableName, IReadOnlyList<T> rows, long? sequenceNumber, CancellationToken ct)
         {
             var json = JsonConvert.SerializeObject(new { Rows = rows }, _dataSettings);
             using (var request = new HttpRequestMessage(HttpMethod.Post, $"{BaseUrl}/datasets/{datasetId}/tables/{tableName}/rows")
