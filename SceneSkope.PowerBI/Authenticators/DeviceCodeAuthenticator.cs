@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 namespace SceneSkope.PowerBI.Authenticators
 {
@@ -22,12 +23,11 @@ namespace SceneSkope.PowerBI.Authenticators
             _notifyDeviceCodeRequest = (uri, code) => throw new InvalidOperationException($"Device code authentication failed");
         }
 
-        protected override async Task<string> InitialGetAccessCodeAsync(CancellationToken ct)
+        protected override async Task<AuthenticationResult> InitialGetAccessCodeAsync(CancellationToken ct)
         {
             var codeResult = await AuthenticationContext.AcquireDeviceCodeAsync(ResourceUri, ClientId).ConfigureAwait(false);
             _notifyDeviceCodeRequest(codeResult.VerificationUrl, codeResult.UserCode);
-            var result = await AuthenticationContext.AcquireTokenByDeviceCodeAsync(codeResult).ConfigureAwait(false);
-            return result.AccessToken;
+            return await AuthenticationContext.AcquireTokenByDeviceCodeAsync(codeResult).ConfigureAwait(false);
         }
     }
 }

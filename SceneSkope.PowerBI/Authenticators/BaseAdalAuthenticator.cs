@@ -16,6 +16,8 @@ namespace SceneSkope.PowerBI.Authenticators
         protected AuthenticationContext AuthenticationContext { get; }
         protected string ClientId { get; }
 
+        public AuthenticationResult LatestResult { get; private set; }
+
         protected BaseAdalAuthenticator(string clientId, byte[] initialState = null)
         {
             var tokenCache = (initialState == null) ? new TokenCache() : new TokenCache(initialState);
@@ -32,6 +34,7 @@ namespace SceneSkope.PowerBI.Authenticators
                 if (AuthenticationContext.TokenCache.Count > 0)
                 {
                     var result = await AuthenticationContext.AcquireTokenSilentAsync(ResourceUri, ClientId).ConfigureAwait(false);
+                    LatestResult = result;
                     _accessToken = result.AccessToken;
                     return _accessToken;
                 }
@@ -39,18 +42,21 @@ namespace SceneSkope.PowerBI.Authenticators
 
             if (_accessToken == null)
             {
-                _accessToken = await InitialGetAccessCodeAsync(ct).ConfigureAwait(false);
+                var result = await InitialGetAccessCodeAsync(ct).ConfigureAwait(false);
+                LatestResult = result;
+                _accessToken = result.AccessToken;
             }
             else
             {
                 var result = await AuthenticationContext.AcquireTokenSilentAsync(ResourceUri, ClientId).ConfigureAwait(false);
+                LatestResult = result;
                 _accessToken = result.AccessToken;
             }
 
             return _accessToken;
         }
 
-        protected abstract Task<string> InitialGetAccessCodeAsync(CancellationToken ct);
+        protected abstract Task<AuthenticationResult> InitialGetAccessCodeAsync(CancellationToken ct);
 
         public byte[] GetSerializedState()
         {
