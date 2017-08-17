@@ -18,7 +18,7 @@ namespace SceneSkope.PowerBI.Authenticators
             Username = username;
         }
 
-        protected override Task<AuthenticationResult> InitialGetAccessCodeAsync(CancellationToken ct) 
+        protected override Task<AuthenticationResult> InitialGetAccessCodeAsync(CancellationToken ct)
             => AuthenticationContext.AcquireTokenAsync(ResourceUri, ClientId, new UserCredential(Username));
     }
 }

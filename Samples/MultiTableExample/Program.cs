@@ -51,7 +51,7 @@ namespace MultiTableExample
         private static readonly Policy RetryPolicy =
             Policy
             .Handle<PowerBIClientException>()
-            .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1), 
+            .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1),
                 (ex, ts) => Console.WriteLine($"Delaying {ts} due to {ex.Message}"));
 
         private static async Task RunAsync(string configurationFile, CancellationToken ct)
@@ -139,25 +139,15 @@ namespace MultiTableExample
         private static async Task<string> GetOrCreateDataset(PowerBIClient powerBIClient, Dataset dataset, PowerBIIdentity[] existingDatasets, CancellationToken ct)
         {
             var existingDataset = existingDatasets.SingleOrDefault(d => d.Name == dataset.Name);
-#if !REUSE_EXISTING
-                if (existingDataset != null)
-                {
-                    await powerBIClient.DeleteDatasetAsync(existingDataset.Id, ct).ConfigureAwait(false);
-                    existingDataset = null;
-                }
-#endif
-            string datasetId;
             if (existingDataset == null)
             {
                 var created = await powerBIClient.CreateDatasetAsync(dataset, DefaultRetentionPolicy.None, ct).ConfigureAwait(false);
-                datasetId = created.Id;
+                return created.Id;
             }
             else
             {
-                datasetId = existingDataset.Id;
+                return existingDataset.Id;
             }
-
-            return datasetId;
         }
 
         public static Dataset CreateLiveDatasetDefinition() =>

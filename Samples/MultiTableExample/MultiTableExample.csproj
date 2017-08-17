@@ -3,18 +3,11 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Target)' == ''">
-    <TargetFramework>netcoreapp1.1</TargetFramework>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Target)' == 'v2'">
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Polly" Version="5.1.0" />
+    <PackageReference Include="Polly" Version="5.3.1" />
   </ItemGroup>
 
   <ItemGroup>

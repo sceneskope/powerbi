@@ -1,14 +1,11 @@
-﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
+﻿using Newtonsoft.Json;
+using SceneSkope.PowerBI.Models;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SceneSkope.PowerBI.Models;
-using System.Collections.Generic;
 
 namespace SceneSkope.PowerBI
 {
@@ -179,6 +176,67 @@ namespace SceneSkope.PowerBI
             var token = await _authenticator.GetAccessTokenAsync(ct).ConfigureAwait(false);
             ct.ThrowIfCancellationRequested();
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+
+        public async Task<Dashboard[]> ListAllDashboardsAsync(CancellationToken ct)
+        {
+            using (var request = new HttpRequestMessage(HttpMethod.Get, $"{BaseUrl}/dashboards"))
+            {
+                var response = await AuthenticateSendRequestAndDecodeResultAsync<PowerBIResult<Dashboard>>(request, ct).ConfigureAwait(false);
+                return response.Value;
+            }
+        }
+
+        public async Task<Tile[]> ListAllTilesAsync(string dashboardId, CancellationToken ct)
+        {
+            using (var request = new HttpRequestMessage(HttpMethod.Get, $"{BaseUrl}/dashboards/{dashboardId}/tiles"))
+            {
+                var response = await AuthenticateSendRequestAndDecodeResultAsync<PowerBIResult<Tile>>(request, ct).ConfigureAwait(false);
+                return response.Value;
+            }
+        }
+
+        public async Task<Tile> GetTileAsync(string dashboardId, string tileId, CancellationToken ct)
+        {
+            using (var request = new HttpRequestMessage(HttpMethod.Get, $"{BaseUrl}/dashboards/{dashboardId}/tiles/{tileId}"))
+            {
+                var response = await AuthenticateSendRequestAndDecodeResultAsync<Tile>(request, ct).ConfigureAwait(false);
+                return response;
+            }
+        }
+
+        public async Task<EmbedToken> GetDashboardTokenAsync(string dashboardId, string accessLevel, CancellationToken ct)
+        {
+            var json = JsonConvert.SerializeObject(new
+            {
+                accessLevel = accessLevel
+            });
+
+            using (var request = new HttpRequestMessage(HttpMethod.Post, $"{BaseUrl}/dashboards/{dashboardId}/GenerateToken")
+            {
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            })
+            {
+                var response = await AuthenticateSendRequestAndDecodeResultAsync<EmbedToken>(request, ct).ConfigureAwait(false);
+                return response;
+            }
+        }
+
+        public async Task<EmbedToken> GetTileTokenAsync(string dashboardId, string tileId, string accessLevel, CancellationToken ct)
+        {
+            var json = JsonConvert.SerializeObject(new
+            {
+                accessLevel = accessLevel
+            });
+
+            using (var request = new HttpRequestMessage(HttpMethod.Post, $"{BaseUrl}/dashboards/{dashboardId}/tiles/{tileId}/GenerateToken")
+            {
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            })
+            {
+                var response = await AuthenticateSendRequestAndDecodeResultAsync<EmbedToken>(request, ct).ConfigureAwait(false);
+                return response;
+            }
         }
     }
 }

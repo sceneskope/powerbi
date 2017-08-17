@@ -2,12 +2,12 @@
 param(
     [string]$BuildNumber="dev",
     [bool] $CreatePackages=$true,
-    [bool] $RunTests = $true,
-	[bool] $CopyLocal = $false
+    [bool] $RunTests = $false,
+    [bool] $CopyLocal = $false
 )
 
 if (!(Test-Path "./semver.txt")) {
-	throw "No semver exists"
+    throw "No semver exists"
 }
 
 Write-Host "BuildNumber: $BuildNumber"
@@ -42,13 +42,6 @@ else {
     $configuration = "Release"
 }
 
-Write-Host "Restore"
-dotnet restore "/p:Version=$version"
-if ($LastExitCode -ne 0) { 
-    Write-Host "Error with restore, aborting build." -Foreground "Red"
-    Exit 1
-}
-
 if ($RunTests) {
     Write-Host "Running tests"
     Push-Location "$PSScriptRoot\PowerBIClientTests\"
@@ -61,7 +54,7 @@ if ($RunTests) {
 }
 
 Write-Host "Building"
-dotnet build -c $configuration "/p:Version=$version"
+dotnet build -c $configuration "/p:Version=$version" /p:ci=true
 if ($LastExitCode -ne 0) { 
     Write-Host "Error with build, aborting build." -Foreground "Red"
     Exit 1

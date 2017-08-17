@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SceneSkope.PowerBI", "SceneSkope.PowerBI\SceneSkope.PowerBI.csproj", "{26367A7A-5ED8-4464-9F54-B7D89419FAB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SceneSkope.PowerBI", "SceneSkope.PowerBI\SceneSkope.PowerBI.csproj", "{26367A7A-5ED8-4464-9F54-B7D89419FAB7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{98320353-2DBA-4C8E-A1E0-47E39AC40123}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,21 +17,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		semver.txt = semver.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetDeviceCode", "GetDeviceCode\GetDeviceCode.csproj", "{46A84200-F5F1-4E90-A688-91CAB1DF2C15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetDeviceCode", "GetDeviceCode\GetDeviceCode.csproj", "{46A84200-F5F1-4E90-A688-91CAB1DF2C15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerBIClientTests", "PowerBIClientTests\PowerBIClientTests.csproj", "{864C9EA5-B2A4-4E51-A1F2-3EBBE896A37A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerBIClientTests", "PowerBIClientTests\PowerBIClientTests.csproj", "{864C9EA5-B2A4-4E51-A1F2-3EBBE896A37A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamingSample", "Samples\StreamingSample\StreamingSample.csproj", "{C950FCCF-FB8E-4402-92F6-7642B8B078B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamingSample", "Samples\StreamingSample\StreamingSample.csproj", "{C950FCCF-FB8E-4402-92F6-7642B8B078B8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{810272B1-0E34-4327-8A97-B031B2F0A85A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PushStreamingSample", "Samples\PushStreamingSample\PushStreamingSample.csproj", "{0F992BE3-5B06-471C-B87A-5C528F39000A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PushStreamingSample", "Samples\PushStreamingSample\PushStreamingSample.csproj", "{0F992BE3-5B06-471C-B87A-5C528F39000A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PushStreamingSampleRetentionNone", "Samples\PushStreamingSampleRetentionNone\PushStreamingSampleRetentionNone.csproj", "{CC0DBCD6-1860-4D44-B728-561A89E450A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PushStreamingSampleRetentionNone", "Samples\PushStreamingSampleRetentionNone\PushStreamingSampleRetentionNone.csproj", "{CC0DBCD6-1860-4D44-B728-561A89E450A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamingUISample", "Samples\StreamingUISample\StreamingUISample.csproj", "{97EB7E41-2845-4B5B-9BA3-313C6205067D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamingUISample", "Samples\StreamingUISample\StreamingUISample.csproj", "{97EB7E41-2845-4B5B-9BA3-313C6205067D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiTableExample", "Samples\MultiTableExample\MultiTableExample.csproj", "{68707EF6-56F3-4AFE-A405-5133FC3A380F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiTableExample", "Samples\MultiTableExample\MultiTableExample.csproj", "{68707EF6-56F3-4AFE-A405-5133FC3A380F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmbedInformation", "Samples\EmbedInformation\EmbedInformation.csproj", "{9525EC8D-4F3D-4BE6-B1E9-5646493355D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{68707EF6-56F3-4AFE-A405-5133FC3A380F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68707EF6-56F3-4AFE-A405-5133FC3A380F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68707EF6-56F3-4AFE-A405-5133FC3A380F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9525EC8D-4F3D-4BE6-B1E9-5646493355D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9525EC8D-4F3D-4BE6-B1E9-5646493355D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9525EC8D-4F3D-4BE6-B1E9-5646493355D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9525EC8D-4F3D-4BE6-B1E9-5646493355D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,5 +87,6 @@ Global
 		{CC0DBCD6-1860-4D44-B728-561A89E450A7} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
 		{97EB7E41-2845-4B5B-9BA3-313C6205067D} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
 		{68707EF6-56F3-4AFE-A405-5133FC3A380F} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
+		{9525EC8D-4F3D-4BE6-B1E9-5646493355D4} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
 	EndGlobalSection
 EndGlobal
