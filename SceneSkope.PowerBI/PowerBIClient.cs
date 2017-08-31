@@ -153,6 +153,16 @@ namespace SceneSkope.PowerBI
             }
         }
 
+        public async Task RefreshDatasetAsync(string datasetId, CancellationToken ct)
+        {
+            using (var request = new HttpRequestMessage(HttpMethod.Post, $"{BaseUrl}/datasets/{datasetId}/refreshes"))
+            using (var response = await AuthenticateAndSendRequestAsync(request, ct).ConfigureAwait(false))
+            {
+                await CheckForFailureAndLogIfRequired(response).ConfigureAwait(false);
+            }
+        }
+
+
         public async Task DeleteDatasetAsync(string id, CancellationToken ct)
         {
             using (var request = new HttpRequestMessage(HttpMethod.Delete, $"{BaseUrl}/datasets/{id}"))

@@ -35,12 +35,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiTableExample", "Sample
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmbedInformation", "Samples\EmbedInformation\EmbedInformation.csproj", "{9525EC8D-4F3D-4BE6-B1E9-5646493355D4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefreshDataset", "Samples\RefreshDataset\RefreshDataset.csproj", "{0b20a564-c310-4e63-be2a-f6c61bd6bd08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0b20a564-c310-4e63-be2a-f6c61bd6bd08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0b20a564-c310-4e63-be2a-f6c61bd6bd08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0b20a564-c310-4e63-be2a-f6c61bd6bd08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0b20a564-c310-4e63-be2a-f6c61bd6bd08}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26367A7A-5ED8-4464-9F54-B7D89419FAB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26367A7A-5ED8-4464-9F54-B7D89419FAB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26367A7A-5ED8-4464-9F54-B7D89419FAB7}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp2.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="CommandLineArgumentsParser" Version="3.0.14" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\SceneSkope.PowerBI\SceneSkope.PowerBI.csproj" />
+    </ItemGroup>
+</Project>
