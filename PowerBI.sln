@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SceneSkope.PowerBI", "SceneSkope.PowerBI\SceneSkope.PowerBI.csproj", "{26367A7A-5ED8-4464-9F54-B7D89419FAB7}"
 EndProject
@@ -33,9 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamingUISample", "Sample
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiTableExample", "Samples\MultiTableExample\MultiTableExample.csproj", "{68707EF6-56F3-4AFE-A405-5133FC3A380F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmbedInformation", "Samples\EmbedInformation\EmbedInformation.csproj", "{9525EC8D-4F3D-4BE6-B1E9-5646493355D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmbedInformation", "Samples\EmbedInformation\EmbedInformation.csproj", "{9525EC8D-4F3D-4BE6-B1E9-5646493355D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefreshDataset", "Samples\RefreshDataset\RefreshDataset.csproj", "{0b20a564-c310-4e63-be2a-f6c61bd6bd08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RefreshDataset", "Samples\RefreshDataset\RefreshDataset.csproj", "{0B20A564-C310-4E63-BE2A-F6C61BD6BD08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +43,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0b20a564-c310-4e63-be2a-f6c61bd6bd08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0b20a564-c310-4e63-be2a-f6c61bd6bd08}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0b20a564-c310-4e63-be2a-f6c61bd6bd08}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0b20a564-c310-4e63-be2a-f6c61bd6bd08}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26367A7A-5ED8-4464-9F54-B7D89419FAB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26367A7A-5ED8-4464-9F54-B7D89419FAB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26367A7A-5ED8-4464-9F54-B7D89419FAB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -83,6 +79,10 @@ Global
 		{9525EC8D-4F3D-4BE6-B1E9-5646493355D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9525EC8D-4F3D-4BE6-B1E9-5646493355D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9525EC8D-4F3D-4BE6-B1E9-5646493355D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B20A564-C310-4E63-BE2A-F6C61BD6BD08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B20A564-C310-4E63-BE2A-F6C61BD6BD08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B20A564-C310-4E63-BE2A-F6C61BD6BD08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B20A564-C310-4E63-BE2A-F6C61BD6BD08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,5 +94,8 @@ Global
 		{97EB7E41-2845-4B5B-9BA3-313C6205067D} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
 		{68707EF6-56F3-4AFE-A405-5133FC3A380F} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
 		{9525EC8D-4F3D-4BE6-B1E9-5646493355D4} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F7319DDB-E4C9-4B55-A562-A702D4493238}
 	EndGlobalSection
 EndGlobal

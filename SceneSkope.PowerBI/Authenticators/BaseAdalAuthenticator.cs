@@ -14,7 +14,7 @@ namespace SceneSkope.PowerBI.Authenticators
         public string ResourceUri { get; set; } = "https://analysis.windows.net/powerbi/api";
 
         protected AuthenticationContext AuthenticationContext { get; }
-        protected string ClientId { get; }
+        public string ClientId { get; }
 
         public AuthenticationResult LatestResult { get; private set; }
 

@@ -43,7 +43,6 @@ namespace RefreshDataset
                 if (!parser.ParsingSucceeded)
                 {
                     parser.ShowUsage();
-
                 }
                 Console.WriteLine($"error: {ex.Message}");
             }

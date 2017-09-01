@@ -162,7 +162,6 @@ namespace SceneSkope.PowerBI
             }
         }
 
-
         public async Task DeleteDatasetAsync(string id, CancellationToken ct)
         {
             using (var request = new HttpRequestMessage(HttpMethod.Delete, $"{BaseUrl}/datasets/{id}"))
