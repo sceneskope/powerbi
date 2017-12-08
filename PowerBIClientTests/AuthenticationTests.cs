@@ -17,7 +17,7 @@ namespace PowerBIClientTests
             _context = context;
         }
 
-        [Fact(Skip = "Not yet implemented")]
+        [Fact]
         public async Task VerifyUserLoginWorks()
         {
             Assert.False(string.IsNullOrWhiteSpace(_context.ClientConfiguration.UserName), "Configuration needs a user name");

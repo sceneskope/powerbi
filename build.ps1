@@ -1,72 +1,61 @@
-[CmdletBinding(PositionalBinding=$false)]
+[CmdletBinding(PositionalBinding = $false)]
 param(
-    [string]$BuildNumber="dev",
-    [bool] $CreatePackages=$true,
+    [bool] $CreatePackages = $true,
     [bool] $RunTests = $false,
-    [bool] $CopyLocal = $false
+    [bool] $CopyLocal = $false,
+    [string] $Configuration = "Release",
+    [string] $BuildNumber
 )
 
-if (!(Test-Path "./semver.txt")) {
-    throw "No semver exists"
-}
+Push-Location $PSScriptRoot
 
-Write-Host "BuildNumber: $BuildNumber"
-Write-Host "CreatePackages: $CreatePackages"
-Write-Host "RunTests: $RunTests"
-
-Get-ChildItem -Recurse -Filter bin | Remove-Item -Recurse
-Get-ChildItem -Recurse -Filter obj | Remove-Item -Recurse
-
+$envBranch = @{ $true = $env:APPVEYOR_REPO_BRANCH; $false = $env:BUILD_SOURCEBRANCHNAME}[$env:APPVEYOR_REPO_BRANCH -ne $NULL]
+$envBuildNumber = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = $BuildNumber}[$env:APPVEYOR_BUILD_NUMBER -ne $NULL]
 $packageOutputFolder = "$PSScriptRoot\.nupkgs"
 
-$semVer = Get-Content (Join-Path $PSScriptRoot "semver.txt")
-if ($semVer.Contains("-")) {
-    if (-not $semVer.EndsWith("-")) {
-        throw "Semver with a dash should end in dash"
-    }
-}
-else {
-    if (-not $semVer.EndsWith(".")) {
-        throw "Semver should end with a dot"
-    }
-}
+$branch = @{ $true = $envBranch; $false = $(git symbolic-ref --short -q HEAD) }[$envBranch -ne $NULL];
+$autoVersion = [math]::floor((New-TimeSpan $(Get-Date) $(Get-Date -month 1 -day 1 -year 2016 -hour 0 -minute 0 -second 0)).TotalMinutes * -1).ToString() + "-" + (Get-Date).ToString("ss")
+$revision = @{ $true = "{0:00000}" -f [convert]::ToInt32("0" + $envBuildNumber, 10); $false = "0-local-$autoVersion" }[$envBuildNumber -ne $NULL -and $envBuildNumber -ne ""];
+$suffix = @{ $true = ""; $false = "$($branch.Substring(0, [math]::Min(10,$branch.Length)))-$revision"}[$branch -eq "master" -and -not $revision.StartsWith("local")]
+$packSuffix = @{ $true=""; $false="--version-suffix=$suffix"}[$suffix -eq ""]
+$commitHash = $(git rev-parse --short HEAD)
+$buildSuffix = @{ $true = "$($suffix)-$($commitHash)"; $false = "$($branch)-$($commitHash)" }[$suffix -ne ""]
 
-if ($BuildNumber -eq "dev") {
-    $semVer = $semVer.Substring(0, $semVer.Length - 1)
-    $autoVersion = [math]::floor((New-TimeSpan $(Get-Date) $(Get-Date -month 1 -day 1 -year 2016 -hour 0 -minute 0 -second 0)).TotalMinutes * -1).ToString() + "-" + (Get-Date).ToString("ss")
-    $version = "$semVer-dev-$autoVersion"
-    $configuration = "Debug"
-}
-else {
-    $version = "$semVer$BuildNumber"
-    $configuration = "Release"
-}
+Write-Host "build: Branch is $branch"
+Write-host "build: Revision is $revision"
+Write-Host "build: Suffix is $suffix"
+Write-Host "build: Package version suffix is $packSuffix"
+Write-Host "build: Build version suffix is $buildSuffix" 
+Write-Host "build: Configuration = $Configuration"
 
-if ($RunTests) {
-    Write-Host "Running tests"
-    Push-Location "$PSScriptRoot\PowerBIClientTests\"
-    dotnet test "/p:Version=$version"
-    if ($LastExitCode -ne 0) { 
-            Write-Host "Error with test, aborting build." -Foreground "Red"
-            Exit 1
-    }
-    Pop-Location
-}
+Write-Host "Cleaning anything old"
+dotnet clean -c $Configuration
 
 Write-Host "Building"
-dotnet build -c $configuration "/p:Version=$version" /p:ci=true
+dotnet build -c $Configuration --version-suffix=$buildSuffix
 if ($LastExitCode -ne 0) { 
     Write-Host "Error with build, aborting build." -Foreground "Red"
     Exit 1
 }
 
+if ($RunTests) {
+    Write-Host "Running tests"
+    Get-ChildItem  -Recurse "*test*\*.csproj" |
+    ForEach-Object {
+        & dotnet test -c $Configuration $_
+        if ($LastExitCode -ne 0) { 
+            Write-Host "Error with test, aborting build." -Foreground "Red"
+            Exit 1
+        }
+    }
+}
 
 if ($CreatePackages) {
     Write-Host "Packing"
     mkdir -Force $packageOutputFolder | Out-Null
 
     Get-ChildItem $packageOutputFolder | Remove-Item
-    dotnet pack --no-build --output $packageOutputFolder -c $configuration "/p:Version=$version" 
+    dotnet pack --output $packageOutputFolder -c $Configuration --no-build $packSuffix
     if ($LastExitCode -ne 0) { 
         Write-Host "Error with pack, aborting build." -Foreground "Red"
         Exit 1
@@ -77,3 +66,5 @@ if ($CreatePackages) {
 }
 Write-Host "Complete"
 
+
+Pop-Location
