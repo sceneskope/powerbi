@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SceneSkope.PowerBI", "SceneSkope.PowerBI\SceneSkope.PowerBI.csproj", "{26367A7A-5ED8-4464-9F54-B7D89419FAB7}"
 EndProject
@@ -14,7 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		directory.build.props = directory.build.props
 		LICENSE = LICENSE
 		README.md = README.md
-		semver.txt = semver.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetDeviceCode", "GetDeviceCode\GetDeviceCode.csproj", "{46A84200-F5F1-4E90-A688-91CAB1DF2C15}"
