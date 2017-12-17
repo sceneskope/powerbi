@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
-using SceneSkope.PowerBI;
-using SceneSkope.PowerBI.Authenticators;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using SceneSkope.PowerBI;
+using SceneSkope.PowerBI.Authenticators;
 
 namespace EmbedInformation
 {
@@ -95,6 +95,16 @@ namespace EmbedInformation
                     }
                 }
 
+                if (arguments.ListReports)
+                {
+                    var reports = await powerBIClient.ListAllReportsAsync(ct).ConfigureAwait(false);
+                    Console.WriteLine($"Got {reports.Length} reports");
+                    foreach (var dashboard in reports)
+                    {
+                        Console.WriteLine($"{JsonConvert.SerializeObject(dashboard)}");
+                    }
+                }
+
                 if (arguments.ListTiles)
                 {
                     var tiles = await powerBIClient.ListAllTilesAsync(arguments.DashboardId, ct).ConfigureAwait(false);
@@ -103,6 +113,14 @@ namespace EmbedInformation
                     {
                         Console.WriteLine($"{JsonConvert.SerializeObject(tile)}");
                     }
+                }
+
+                if (arguments.EmbedToken && !string.IsNullOrWhiteSpace(arguments.ReportId))
+                {
+                    var report = await powerBIClient.GetReportAsync(arguments.ReportId, ct).ConfigureAwait(false);
+                    Console.WriteLine($"Report: {JsonConvert.SerializeObject(report)}");
+                    var token = await powerBIClient.GetReportTokenAsync(arguments.ReportId, "View", ct).ConfigureAwait(false);
+                    Console.WriteLine($"Report token: {JsonConvert.SerializeObject(token)}");
                 }
 
                 if (arguments.EmbedToken && !string.IsNullOrWhiteSpace(arguments.TileId) && !string.IsNullOrWhiteSpace(arguments.DashboardId))

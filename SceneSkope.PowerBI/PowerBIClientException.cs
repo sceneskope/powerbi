@@ -30,5 +30,21 @@ namespace SceneSkope.PowerBI
             ReasonPhrase = reasonPhrase;
             Response = response;
         }
+
+        public PowerBIClientException() : base()
+        {
+        }
+
+        protected PowerBIClientException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context)
+        {
+        }
+
+        public PowerBIClientException(string message) : base(message)
+        {
+        }
+
+        public PowerBIClientException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 }

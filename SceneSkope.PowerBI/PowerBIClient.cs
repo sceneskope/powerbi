@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using SceneSkope.PowerBI.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using SceneSkope.PowerBI.Models;
 
 namespace SceneSkope.PowerBI
 {
@@ -187,6 +187,15 @@ namespace SceneSkope.PowerBI
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
+        public async Task<Report[]> ListAllReportsAsync(CancellationToken ct)
+        {
+            using (var request = new HttpRequestMessage(HttpMethod.Get, $"{BaseUrl}/reports"))
+            {
+                var response = await AuthenticateSendRequestAndDecodeResultAsync<PowerBIResult<Report>>(request, ct).ConfigureAwait(false);
+                return response.Value;
+            }
+        }
+
         public async Task<Dashboard[]> ListAllDashboardsAsync(CancellationToken ct)
         {
             using (var request = new HttpRequestMessage(HttpMethod.Get, $"{BaseUrl}/dashboards"))
@@ -214,12 +223,30 @@ namespace SceneSkope.PowerBI
             }
         }
 
+        public async Task<Report> GetReportAsync(string reportId, CancellationToken ct)
+        {
+            using (var request = new HttpRequestMessage(HttpMethod.Get, $"{BaseUrl}/reports/{reportId}"))
+            {
+                return await AuthenticateSendRequestAndDecodeResultAsync<Report>(request, ct).ConfigureAwait(false);
+            }
+        }
+
+        public async Task<EmbedToken> GetReportTokenAsync(string reportId, string accessLevel, CancellationToken ct)
+        {
+            var json = JsonConvert.SerializeObject(new { accessLevel });
+
+            using (var request = new HttpRequestMessage(HttpMethod.Post, $"{BaseUrl}/reports/{reportId}/GenerateToken")
+            {
+                Content = new StringContent(json, Encoding.UTF8, "application/json")
+            })
+            {
+                return await AuthenticateSendRequestAndDecodeResultAsync<EmbedToken>(request, ct).ConfigureAwait(false);
+            }
+        }
+
         public async Task<EmbedToken> GetDashboardTokenAsync(string dashboardId, string accessLevel, CancellationToken ct)
         {
-            var json = JsonConvert.SerializeObject(new
-            {
-                accessLevel = accessLevel
-            });
+            var json = JsonConvert.SerializeObject(new { accessLevel });
 
             using (var request = new HttpRequestMessage(HttpMethod.Post, $"{BaseUrl}/dashboards/{dashboardId}/GenerateToken")
             {
@@ -233,10 +260,7 @@ namespace SceneSkope.PowerBI
 
         public async Task<EmbedToken> GetTileTokenAsync(string dashboardId, string tileId, string accessLevel, CancellationToken ct)
         {
-            var json = JsonConvert.SerializeObject(new
-            {
-                accessLevel = accessLevel
-            });
+            var json = JsonConvert.SerializeObject(new { accessLevel });
 
             using (var request = new HttpRequestMessage(HttpMethod.Post, $"{BaseUrl}/dashboards/{dashboardId}/tiles/{tileId}/GenerateToken")
             {

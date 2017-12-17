@@ -25,7 +25,9 @@ namespace PowerBIClientTests
             Assert.NotNull(datasets);
         }
 
+#pragma warning disable xUnit1004 // Test methods should not be skipped
         [Fact(Skip="Groups not in permissions")]
+#pragma warning restore xUnit1004 // Test methods should not be skipped
         public async Task TestListGroups()
         {
             var client = _context.CreateClient();
@@ -33,7 +35,9 @@ namespace PowerBIClientTests
             Assert.NotNull(groups);
         }
 
+#pragma warning disable xUnit1004 // Test methods should not be skipped
         [Fact(Skip = "Groups not in permissions")]
+#pragma warning restore xUnit1004 // Test methods should not be skipped
         public async Task TestCreateGroupDataset()
         {
             var client = _context.CreateClient();
@@ -178,7 +182,7 @@ namespace PowerBIClientTests
 
             var sequenceNumbers = await client.GetTableSequenceNumbersAsync(datasetId.Id, dataset.Tables[0].Name, CancellationToken.None).ConfigureAwait(false);
             Assert.NotNull(sequenceNumbers);
-            Assert.Equal(0, sequenceNumbers.Length);
+            Assert.Empty(sequenceNumbers);
 
             var rows = new[]
             {
@@ -189,12 +193,12 @@ namespace PowerBIClientTests
             await client.AddRowsAsync(datasetId.Id, dataset.Tables[0].Name, rows, CancellationToken.None).ConfigureAwait(false);
             sequenceNumbers = await client.GetTableSequenceNumbersAsync(datasetId.Id, dataset.Tables[0].Name, CancellationToken.None).ConfigureAwait(false);
             Assert.NotNull(sequenceNumbers);
-            Assert.Equal(0, sequenceNumbers.Length);
+            Assert.Empty(sequenceNumbers);
 
             await client.AddRowsAsync(datasetId.Id, dataset.Tables[0].Name, rows, 2, CancellationToken.None).ConfigureAwait(false);
             sequenceNumbers = await client.GetTableSequenceNumbersAsync(datasetId.Id, dataset.Tables[0].Name, CancellationToken.None).ConfigureAwait(false);
             Assert.NotNull(sequenceNumbers);
-            Assert.Equal(1, sequenceNumbers.Length);
+            Assert.Single(sequenceNumbers);
             Assert.Equal(2, sequenceNumbers[0].SequenceNumber);
 
             await client.ClearRowsAsync(datasetId.Id, dataset.Tables[0].Name, CancellationToken.None).ConfigureAwait(false);
