@@ -39,7 +39,7 @@ namespace GetDeviceCode
 
         private static async Task RunAsync(string clientId, string outputFile, CancellationToken ct)
         {
-            var authenticator = new DeviceCodeAuthenticator(clientId,
+            var authenticator = new DeviceCodeTokenProvider(clientId,
                 (url, deviceCode) => Console.WriteLine($"Go to {url} and enter device code {deviceCode}"));
 
             await authenticator.GetAccessTokenAsync(ct).ConfigureAwait(false);

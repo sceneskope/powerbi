@@ -1,11 +1,12 @@
 ﻿#define REUSE_EXISTING
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Rest;
 using Newtonsoft.Json;
 using Polly;
 using SceneSkope.PowerBI;
@@ -50,27 +51,24 @@ namespace MultiTableExample
 
         private static readonly Policy RetryPolicy =
             Policy
-            .Handle<PowerBIClientException>()
+            .Handle<Exception>()
             .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1),
                 (ex, ts) => Console.WriteLine($"Delaying {ts} due to {ex.Message}"));
 
         private static async Task RunAsync(string configurationFile, CancellationToken ct)
         {
-            using (var httpClient = new HttpClient())
+            var configuration = JsonConvert.DeserializeObject<ClientConfiguration>(File.ReadAllText(configurationFile));
+            var tokenProvider = new DeviceCodeTokenProvider(configuration.ClientId, configuration.TokenCacheState);
+
+            using (var powerBIClient = new PowerBIClient(new TokenCredentials(tokenProvider)))
             {
-                var configuration = JsonConvert.DeserializeObject<ClientConfiguration>(File.ReadAllText(configurationFile));
-                var authenticator = new DeviceCodeAuthenticator(configuration.ClientId, configuration.TokenCacheState);
-                var powerBIClient = new PowerBIClient(httpClient, authenticator)
-                {
-                    UseBeta = true
-                };
-                var existingDatasets = await powerBIClient.ListAllDatasetsAsync(ct).ConfigureAwait(false);
+                var existingDatasets = await powerBIClient.Datasets.GetDatasetsAsync(ct).ConfigureAwait(false);
                 var dataset = CreateDatasetDefinition();
-                var datasetId = await GetOrCreateDataset(powerBIClient, dataset, existingDatasets, ct).ConfigureAwait(false);
+                var datasetId = await GetOrCreateDataset(powerBIClient, dataset, existingDatasets.Value, ct).ConfigureAwait(false);
                 var perMinuteStatus = dataset.Tables[0].Name;
 
                 var liveDataset = CreateLiveDatasetDefinition();
-                var liveDatasetId = await GetOrCreateDataset(powerBIClient, liveDataset, existingDatasets, ct).ConfigureAwait(false);
+                var liveDatasetId = await GetOrCreateDataset(powerBIClient, liveDataset, existingDatasets.Value, ct).ConfigureAwait(false);
                 var liveStatus = liveDataset.Tables[0].Name;
 
                 var random = new Random();
@@ -107,7 +105,7 @@ namespace MultiTableExample
                         PlayersAllTime = playersAllTime
                     };
                     await RetryPolicy.ExecuteAsync(cancel =>
-                        powerBIClient.AddRowsAsync(liveDatasetId, liveStatus, new[] { liveRow }, cancel),
+                        powerBIClient.Datasets.PostRowsAsync(liveDatasetId, liveStatus, new[] { liveRow }, cancel),
                         ct, false
                     ).ConfigureAwait(false);
 
@@ -126,7 +124,7 @@ namespace MultiTableExample
                             };
                         }
                         await RetryPolicy.ExecuteAsync(cancel =>
-                            powerBIClient.AddRowsAsync(datasetId, perMinuteStatus, minuteRows, cancel),
+                            powerBIClient.Datasets.PostRowsAsync(datasetId, perMinuteStatus, minuteRows, cancel),
                             ct, false
                         ).ConfigureAwait(false);
                         minuteStart = now;
@@ -136,13 +134,16 @@ namespace MultiTableExample
             }
         }
 
-        private static async Task<string> GetOrCreateDataset(PowerBIClient powerBIClient, Dataset dataset, PowerBIIdentity[] existingDatasets, CancellationToken ct)
+        private static async Task<string> GetOrCreateDataset(PowerBIClient powerBIClient, Dataset dataset, IEnumerable<Dataset> existingDatasets, CancellationToken ct)
         {
             var existingDataset = existingDatasets.SingleOrDefault(d => d.Name == dataset.Name);
             if (existingDataset == null)
             {
-                var created = await powerBIClient.CreateDatasetAsync(dataset, DefaultRetentionPolicy.None, ct).ConfigureAwait(false);
-                return created.Id;
+                var retentionPolicy = dataset.DefaultRetentionPolicy;
+                dataset.DefaultRetentionPolicy = null;
+                var created = await powerBIClient.Datasets.PostDatasetAsync(dataset, retentionPolicy, ct).ConfigureAwait(false);
+                var createdDataset = created as Dataset;
+                return createdDataset.Id;
             }
             else
             {
@@ -154,6 +155,7 @@ namespace MultiTableExample
             new Dataset
             {
                 DefaultMode = DatasetMode.PushStreaming,
+                DefaultRetentionPolicy = DefaultRetentionPolicy.BasicFIFO,
                 Name = "MultiTableStatus",
                 Tables = new[]
                 {
@@ -162,7 +164,7 @@ namespace MultiTableExample
                         Name = "LiveStatus",
                         Columns = new[]
                         {
-                            new Column { Name = "TimestampUtc", DataType = DataType.DateTime },
+                            new Column { Name = "TimestampUtc", DataType = DataType.Datetime },
                             new Column { Name = "ActivePlayers", DataType = DataType.Int64 },
                             new Column { Name = "PlayersToday", DataType = DataType.Int64 },
                             new Column { Name = "PlayersAllTime", DataType = DataType.Int64 }
@@ -175,6 +177,7 @@ namespace MultiTableExample
             new Dataset
             {
                 DefaultMode = DatasetMode.Push,
+                DefaultRetentionPolicy = DefaultRetentionPolicy.None,
                 Name = "MultiTableExample",
                 Tables = new[]
                 {
@@ -183,11 +186,11 @@ namespace MultiTableExample
                         Name = "PerMinuteStatus",
                         Columns = new[]
                         {
-                            new Column { Name = "TimestampUtc", DataType = DataType.DateTime },
+                            new Column { Name = "TimestampUtc", DataType = DataType.Datetime },
                             new Column { Name = "Name", DataType = DataType.String },
-                            new Column { Name = "Image", DataType = DataType.String, DataCategory = DataCategory.ImageUrl },
-                            new Column { Name = "Count", DataType = DataType.Int64, SummarizeBy = AggregationMethod.Sum },
-                            new Column { Name = "Score", DataType = DataType.Int64, SummarizeBy = AggregationMethod.Sum }
+                            new Column { Name = "Image", DataType = DataType.String, DataCategory = "ImageUrl" },
+                            new Column { Name = "Count", DataType = DataType.Int64, SummarizeBy = "Sum" },
+                            new Column { Name = "Score", DataType = DataType.Int64, SummarizeBy = "Sum" }
                         },
                         Measures = new[]
                         {

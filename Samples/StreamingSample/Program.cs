@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using SceneSkope.PowerBI.Authenticators;
+using Microsoft.Rest;
 
 namespace StreamingSample
 {
@@ -48,22 +49,19 @@ namespace StreamingSample
 
         private static async Task RunAsync(string configurationFile, CancellationToken ct)
         {
-            using (var httpClient = new HttpClient())
+            var configuration = JsonConvert.DeserializeObject<ClientConfiguration>(File.ReadAllText(configurationFile));
+            var tokenProvider = new DeviceCodeTokenProvider(configuration.ClientId, configuration.TokenCacheState);
+
+            using (var powerBIClient = new PowerBIClient(new TokenCredentials(tokenProvider)))
             {
-                var configuration = JsonConvert.DeserializeObject<ClientConfiguration>(File.ReadAllText(configurationFile));
-                var authenticator = new DeviceCodeAuthenticator(configuration.ClientId, configuration.TokenCacheState);
-                var powerBIClient = new PowerBIClient(httpClient, authenticator)
-                {
-                    UseBeta = true
-                };
                 var dataset = CreateDatasetDefinition();
-                var existingDatasets = await powerBIClient.ListAllDatasetsAsync(ct).ConfigureAwait(false);
-                var existingDataset = existingDatasets.SingleOrDefault(d => d.Name == dataset.Name);
+                var existingDatasets = await powerBIClient.Datasets.GetDatasetsAsync(ct).ConfigureAwait(false);
+                var existingDataset = existingDatasets.Value.SingleOrDefault(d => d.Name == dataset.Name);
                 string datasetId;
                 if (existingDataset == null)
                 {
-                    var created = await powerBIClient.CreateDatasetAsync(dataset, DefaultRetentionPolicy.basicFifo, ct).ConfigureAwait(false);
-                    datasetId = created.Id;
+                    var created = await powerBIClient.Datasets.PostDatasetAsync(dataset, DefaultRetentionPolicy.BasicFIFO, ct).ConfigureAwait(false);
+                    datasetId = ((Dataset)created).Id;
                 }
                 else
                 {
@@ -81,7 +79,7 @@ namespace StreamingSample
                         Flag = random.NextDouble() > 0.5,
                         Label = $"Label {random.Next(0, 1000)}"
                     };
-                    await powerBIClient.AddRowsAsync(datasetId, tableName, new[] { row }, ct).ConfigureAwait(false);
+                    await powerBIClient.Datasets.PostRowsAsync(datasetId, tableName, new[] { row }, ct).ConfigureAwait(false);
                     await Task.Delay(5000, ct).ConfigureAwait(false);
                 }
             }
@@ -99,7 +97,7 @@ namespace StreamingSample
                         Name = "StreamingTable",
                         Columns = new[]
                         {
-                            new Column { Name = "TimestampUtc", DataType = DataType.DateTime },
+                            new Column { Name = "TimestampUtc", DataType = DataType.Datetime },
                             new Column { Name = "IntCounter", DataType = DataType.Int64 },
                             new Column { Name = "FloatCounter", DataType = DataType.Double },
                             new Column { Name = "Flag", DataType = DataType.Boolean },

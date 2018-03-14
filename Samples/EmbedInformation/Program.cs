@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Rest;
 using Newtonsoft.Json;
 using SceneSkope.PowerBI;
 using SceneSkope.PowerBI.Authenticators;
+using SceneSkope.PowerBI.Models;
 
 namespace EmbedInformation
 {
@@ -51,104 +52,97 @@ namespace EmbedInformation
 
         private static async Task RunAsync(Arguments arguments, CancellationToken ct)
         {
-            using (var httpClient = new HttpClient())
+            DeviceCodeTokenProvider tokenProvider;
+            if (!string.IsNullOrWhiteSpace(arguments.TokenFile) && File.Exists(arguments.TokenFile))
             {
-                DeviceCodeAuthenticator authenticator;
-                if (!string.IsNullOrWhiteSpace(arguments.TokenFile) && File.Exists(arguments.TokenFile))
-                {
-                    var configuration = JsonConvert.DeserializeObject<ClientConfiguration>(File.ReadAllText(arguments.TokenFile));
-                    authenticator = new DeviceCodeAuthenticator(configuration.ClientId, configuration.TokenCacheState);
-                }
-                else
-                {
-                    authenticator = new DeviceCodeAuthenticator(arguments.ClientId,
-                                    (url, deviceCode) => Console.WriteLine($"Go to {url} and enter device code {deviceCode}"));
-                }
+                var configuration = JsonConvert.DeserializeObject<ClientConfiguration>(File.ReadAllText(arguments.TokenFile));
+                tokenProvider = new DeviceCodeTokenProvider(configuration.ClientId, configuration.TokenCacheState);
+            }
+            else
+            {
+                tokenProvider = new DeviceCodeTokenProvider(arguments.ClientId,
+                                (url, deviceCode) => Console.WriteLine($"Go to {url} and enter device code {deviceCode}"));
+            }
 
-                var powerBIClient = new PowerBIClient(httpClient, authenticator)
-                {
-                    UseBeta = true
-                };
+            var powerBIClient = new PowerBIClient(new TokenCredentials(tokenProvider));
 
-                if (arguments.ListGroups)
+            if (arguments.ListGroups)
+            {
+                var groups = await powerBIClient.Groups.GetGroupsAsync(ct).ConfigureAwait(false);
+                Console.WriteLine($"Got {groups.Value.Count} groups");
+                foreach (var group in groups.Value)
                 {
-                    var groups = await powerBIClient.ListAllGroupsAsync(ct).ConfigureAwait(false);
-                    Console.WriteLine($"Got {groups.Length} groups");
-                    foreach (var group in groups)
-                    {
-                        Console.WriteLine(JsonConvert.SerializeObject(group));
-                    }
+                    Console.WriteLine(JsonConvert.SerializeObject(group));
                 }
+            }
 
-                if (!string.IsNullOrWhiteSpace(arguments.GroupId))
-                {
-                    powerBIClient = powerBIClient.CreateGroupClient(arguments.GroupId);
-                }
+            var noGroup = string.IsNullOrWhiteSpace(arguments.GroupId);
 
-                if (arguments.ListDatasets)
+            if (arguments.ListDatasets)
+            {
+                var datasets = await (noGroup ? powerBIClient.Datasets.GetDatasetsAsync(ct) : powerBIClient.Datasets.GetDatasetsInGroupAsync(arguments.GroupId, ct)).ConfigureAwait(false);
+                Console.WriteLine($"Got {datasets.Value.Count} datasets");
+                foreach (var dataset in datasets.Value)
                 {
-                    var datasets = await powerBIClient.ListAllDatasetsAsync(ct).ConfigureAwait(false);
-                    Console.WriteLine($"Got {datasets.Length} datasets");
-                    foreach (var dataset in datasets)
-                    {
-                        Console.WriteLine(JsonConvert.SerializeObject(dataset));
-                    }
+                    Console.WriteLine(JsonConvert.SerializeObject(dataset));
                 }
+            }
 
-                if (arguments.ListDashboards)
+            if (arguments.ListDashboards)
+            {
+                var dashboards = await (noGroup ? powerBIClient.Dashboards.GetDashboardsAsync(ct) : powerBIClient.Dashboards.GetDashboardsInGroupAsync(arguments.GroupId, ct)).ConfigureAwait(false);
+                Console.WriteLine($"Got {dashboards.Value.Count} dashboards");
+                foreach (var dashboard in dashboards.Value)
                 {
-                    var dashboards = await powerBIClient.ListAllDashboardsAsync(ct).ConfigureAwait(false);
-                    Console.WriteLine($"Got {dashboards.Length} dashboards");
-                    foreach (var dashboard in dashboards)
-                    {
-                        Console.WriteLine(JsonConvert.SerializeObject(dashboard));
-                    }
+                    Console.WriteLine(JsonConvert.SerializeObject(dashboard));
                 }
+            }
 
-                if (arguments.ListReports)
+            if (arguments.ListReports)
+            {
+                var reports = await (noGroup ? powerBIClient.Reports.GetReportsAsync(ct) : powerBIClient.Reports.GetReportsInGroupAsync(arguments.GroupId, ct)).ConfigureAwait(false);
+                Console.WriteLine($"Got {reports.Value.Count} reports");
+                foreach (var dashboard in reports.Value)
                 {
-                    var reports = await powerBIClient.ListAllReportsAsync(ct).ConfigureAwait(false);
-                    Console.WriteLine($"Got {reports.Length} reports");
-                    foreach (var dashboard in reports)
-                    {
-                        Console.WriteLine(JsonConvert.SerializeObject(dashboard));
-                    }
+                    Console.WriteLine(JsonConvert.SerializeObject(dashboard));
                 }
+            }
 
-                if (arguments.ListTiles)
+            if (arguments.ListTiles)
+            {
+                var tiles = await (noGroup ? powerBIClient.Dashboards.GetTilesAsync(arguments.DashboardId, ct) : powerBIClient.Dashboards.GetTilesInGroupAsync(arguments.GroupId, arguments.DashboardId, ct)).ConfigureAwait(false);
+                Console.WriteLine($"Got {tiles.Value.Count} tiles");
+                foreach (var tile in tiles.Value)
                 {
-                    var tiles = await powerBIClient.ListAllTilesAsync(arguments.DashboardId, ct).ConfigureAwait(false);
-                    Console.WriteLine($"Got {tiles.Length} tiles");
-                    foreach (var tile in tiles)
-                    {
-                        Console.WriteLine(JsonConvert.SerializeObject(tile));
-                    }
+                    Console.WriteLine(JsonConvert.SerializeObject(tile));
                 }
+            }
 
-                if (arguments.EmbedToken && !string.IsNullOrWhiteSpace(arguments.ReportId))
-                {
-                    var report = await powerBIClient.GetReportAsync(arguments.ReportId, ct).ConfigureAwait(false);
-                    Console.WriteLine($"Report: {JsonConvert.SerializeObject(report)}");
-                    var token = await powerBIClient.GetReportTokenAsync(arguments.ReportId, "View", ct).ConfigureAwait(false);
-                    Console.WriteLine($"Report token: {JsonConvert.SerializeObject(token)}");
-                }
+            if (arguments.EmbedToken && !string.IsNullOrWhiteSpace(arguments.ReportId))
+            {
+                var report = await (noGroup ? powerBIClient.Reports.GetReportAsync(arguments.ReportId, ct) : powerBIClient.Reports.GetReportInGroupAsync(arguments.GroupId, arguments.ReportId, ct)).ConfigureAwait(false);
+                Console.WriteLine($"Report: {JsonConvert.SerializeObject(report)}");
+                var request = new GenerateTokenRequest { AccessLevel = "View" };
+                var token = await (noGroup ? powerBIClient.Reports.GenerateTokenAsync(arguments.ReportId, request, ct) : powerBIClient.Reports.GenerateTokenInGroupAsync(arguments.GroupId, arguments.ReportId, request, ct)).ConfigureAwait(false);
+                Console.WriteLine($"Report token: {JsonConvert.SerializeObject(token)}");
+            }
 
-                if (arguments.EmbedToken && !string.IsNullOrWhiteSpace(arguments.TileId) && !string.IsNullOrWhiteSpace(arguments.DashboardId))
-                {
-                    var tile = await powerBIClient.GetTileAsync(arguments.DashboardId, arguments.TileId, ct).ConfigureAwait(false);
-                    Console.WriteLine($"Tile: {JsonConvert.SerializeObject(tile)}");
-                    var token = await powerBIClient.GetDashboardTokenAsync(arguments.DashboardId, "View", ct).ConfigureAwait(false);
-                    Console.WriteLine($"Dashboard Token: {JsonConvert.SerializeObject(token)}");
-                    token = await powerBIClient.GetTileTokenAsync(arguments.DashboardId, arguments.TileId, "View", ct).ConfigureAwait(false);
-                    Console.WriteLine($"Tile Token: {JsonConvert.SerializeObject(token)}");
-                }
+            if (arguments.EmbedToken && !string.IsNullOrWhiteSpace(arguments.TileId) && !string.IsNullOrWhiteSpace(arguments.DashboardId))
+            {
+                var tile = await (noGroup ? powerBIClient.Dashboards.GetTileAsync(arguments.DashboardId, arguments.TileId, ct) : powerBIClient.Dashboards.GetTileInGroupAsync(arguments.GroupId, arguments.DashboardId, arguments.TileId, ct)).ConfigureAwait(false);
+                Console.WriteLine($"Tile: {JsonConvert.SerializeObject(tile)}");
+                var request = new GenerateTokenRequest { AccessLevel = "View" };
+                var token = await (noGroup ? powerBIClient.Dashboards.GenerateTokenAsync(arguments.DashboardId, request, ct) : powerBIClient.Dashboards.GenerateTokenInGroupAsync(arguments.GroupId, arguments.DashboardId, request, ct)).ConfigureAwait(false);
+                Console.WriteLine($"Dashboard Token: {JsonConvert.SerializeObject(token)}");
+                token = await (noGroup ? powerBIClient.Tiles.GenerateTokenAsync(arguments.DashboardId, arguments.TileId, request, ct) : powerBIClient.Tiles.GenerateTokenInGroupAsync(arguments.GroupId, arguments.DashboardId, arguments.TileId, request, ct)).ConfigureAwait(false);
+                Console.WriteLine($"Tile Token: {JsonConvert.SerializeObject(token)}");
+            }
 
-                if (!string.IsNullOrWhiteSpace(arguments.TokenFile))
-                {
-                    var state = authenticator.GetSerializedState();
-                    var clientConfiguration = new ClientConfiguration { ClientId = arguments.ClientId, TokenCacheState = state };
-                    File.WriteAllText(arguments.TokenFile, JsonConvert.SerializeObject(clientConfiguration));
-                }
+            if (!string.IsNullOrWhiteSpace(arguments.TokenFile))
+            {
+                var state = tokenProvider.GetSerializedState();
+                var clientConfiguration = new ClientConfiguration { ClientId = arguments.ClientId, TokenCacheState = state };
+                File.WriteAllText(arguments.TokenFile, JsonConvert.SerializeObject(clientConfiguration));
             }
         }
     }

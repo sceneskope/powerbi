@@ -10,15 +10,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
+		autogenerate.ps1 = autogenerate.ps1
 		build.ps1 = build.ps1
 		directory.build.props = directory.build.props
 		LICENSE = LICENSE
+		powerbi.json = powerbi.json
 		README.md = README.md
+	EndProjectSection
+	ProjectSection(FolderGlobals) = preProject
+		__JSONSchema = http://json.schemastore.org/swagger-2.0
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetDeviceCode", "GetDeviceCode\GetDeviceCode.csproj", "{46A84200-F5F1-4E90-A688-91CAB1DF2C15}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PowerBIClientTests", "PowerBIClientTests\PowerBIClientTests.csproj", "{864C9EA5-B2A4-4E51-A1F2-3EBBE896A37A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamingSample", "Samples\StreamingSample\StreamingSample.csproj", "{C950FCCF-FB8E-4402-92F6-7642B8B078B8}"
 EndProject
@@ -27,8 +30,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PushStreamingSample", "Samples\PushStreamingSample\PushStreamingSample.csproj", "{0F992BE3-5B06-471C-B87A-5C528F39000A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PushStreamingSampleRetentionNone", "Samples\PushStreamingSampleRetentionNone\PushStreamingSampleRetentionNone.csproj", "{CC0DBCD6-1860-4D44-B728-561A89E450A7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamingUISample", "Samples\StreamingUISample\StreamingUISample.csproj", "{97EB7E41-2845-4B5B-9BA3-313C6205067D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultiTableExample", "Samples\MultiTableExample\MultiTableExample.csproj", "{68707EF6-56F3-4AFE-A405-5133FC3A380F}"
 EndProject
@@ -50,10 +51,6 @@ Global
 		{46A84200-F5F1-4E90-A688-91CAB1DF2C15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46A84200-F5F1-4E90-A688-91CAB1DF2C15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46A84200-F5F1-4E90-A688-91CAB1DF2C15}.Release|Any CPU.Build.0 = Release|Any CPU
-		{864C9EA5-B2A4-4E51-A1F2-3EBBE896A37A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{864C9EA5-B2A4-4E51-A1F2-3EBBE896A37A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{864C9EA5-B2A4-4E51-A1F2-3EBBE896A37A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{864C9EA5-B2A4-4E51-A1F2-3EBBE896A37A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C950FCCF-FB8E-4402-92F6-7642B8B078B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C950FCCF-FB8E-4402-92F6-7642B8B078B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C950FCCF-FB8E-4402-92F6-7642B8B078B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -66,10 +63,6 @@ Global
 		{CC0DBCD6-1860-4D44-B728-561A89E450A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC0DBCD6-1860-4D44-B728-561A89E450A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC0DBCD6-1860-4D44-B728-561A89E450A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{97EB7E41-2845-4B5B-9BA3-313C6205067D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97EB7E41-2845-4B5B-9BA3-313C6205067D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97EB7E41-2845-4B5B-9BA3-313C6205067D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97EB7E41-2845-4B5B-9BA3-313C6205067D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{68707EF6-56F3-4AFE-A405-5133FC3A380F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{68707EF6-56F3-4AFE-A405-5133FC3A380F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68707EF6-56F3-4AFE-A405-5133FC3A380F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -90,9 +83,9 @@ Global
 		{C950FCCF-FB8E-4402-92F6-7642B8B078B8} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
 		{0F992BE3-5B06-471C-B87A-5C528F39000A} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
 		{CC0DBCD6-1860-4D44-B728-561A89E450A7} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
-		{97EB7E41-2845-4B5B-9BA3-313C6205067D} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
 		{68707EF6-56F3-4AFE-A405-5133FC3A380F} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
 		{9525EC8D-4F3D-4BE6-B1E9-5646493355D4} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
+		{0B20A564-C310-4E63-BE2A-F6C61BD6BD08} = {810272B1-0E34-4327-8A97-B031B2F0A85A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F7319DDB-E4C9-4B55-A562-A702D4493238}
