@@ -76,7 +76,7 @@ namespace EmbedInformation
                     Console.WriteLine($"Got {groups.Length} groups");
                     foreach (var group in groups)
                     {
-                        Console.WriteLine($"{JsonConvert.SerializeObject(group)}");
+                        Console.WriteLine(JsonConvert.SerializeObject(group));
                     }
                 }
 
@@ -85,13 +85,23 @@ namespace EmbedInformation
                     powerBIClient = powerBIClient.CreateGroupClient(arguments.GroupId);
                 }
 
+                if (arguments.ListDatasets)
+                {
+                    var datasets = await powerBIClient.ListAllDatasetsAsync(ct).ConfigureAwait(false);
+                    Console.WriteLine($"Got {datasets.Length} datasets");
+                    foreach (var dataset in datasets)
+                    {
+                        Console.WriteLine(JsonConvert.SerializeObject(dataset));
+                    }
+                }
+
                 if (arguments.ListDashboards)
                 {
                     var dashboards = await powerBIClient.ListAllDashboardsAsync(ct).ConfigureAwait(false);
                     Console.WriteLine($"Got {dashboards.Length} dashboards");
                     foreach (var dashboard in dashboards)
                     {
-                        Console.WriteLine($"{JsonConvert.SerializeObject(dashboard)}");
+                        Console.WriteLine(JsonConvert.SerializeObject(dashboard));
                     }
                 }
 
@@ -101,7 +111,7 @@ namespace EmbedInformation
                     Console.WriteLine($"Got {reports.Length} reports");
                     foreach (var dashboard in reports)
                     {
-                        Console.WriteLine($"{JsonConvert.SerializeObject(dashboard)}");
+                        Console.WriteLine(JsonConvert.SerializeObject(dashboard));
                     }
                 }
 
@@ -111,7 +121,7 @@ namespace EmbedInformation
                     Console.WriteLine($"Got {tiles.Length} tiles");
                     foreach (var tile in tiles)
                     {
-                        Console.WriteLine($"{JsonConvert.SerializeObject(tile)}");
+                        Console.WriteLine(JsonConvert.SerializeObject(tile));
                     }
                 }
 

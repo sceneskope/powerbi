@@ -19,6 +19,6 @@ namespace SceneSkope.PowerBI.Models
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public bool IsHidden { get; set; }
 
-        public override string ToString() => $"{Name}";
+        public override string ToString() => Name;
     }
 }

@@ -20,7 +20,9 @@ namespace SceneSkope.PowerBI.Authenticators
         public DeviceCodeAuthenticator(string clientId, byte[] initialState)
             : base(clientId, initialState)
         {
-            _notifyDeviceCodeRequest = (uri, code) => throw new InvalidOperationException($"Device code authentication failed");
+#pragma warning disable RCS1163 // Unused parameter.
+            _notifyDeviceCodeRequest = (uri, code) => throw new InvalidOperationException("Device code authentication failed");
+#pragma warning restore RCS1163 // Unused parameter.
         }
 
         protected override async Task<AuthenticationResult> InitialGetAccessCodeAsync(CancellationToken ct)

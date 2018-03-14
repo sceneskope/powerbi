@@ -25,6 +25,6 @@ namespace SceneSkope.PowerBI.Models
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string ToColumn { get; set; }
 
-        public override string ToString() => $"{Name}";
+        public override string ToString() => Name;
     }
 }

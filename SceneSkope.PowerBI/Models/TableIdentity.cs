@@ -7,6 +7,6 @@ namespace SceneSkope.PowerBI.Models
         [JsonProperty(Required = Required.Always)]
         public string Name { get; set; }
 
-        public override string ToString() => $"{Name}";
+        public override string ToString() => Name;
     }
 }

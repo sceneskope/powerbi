@@ -28,6 +28,9 @@ namespace EmbedInformation
         [SwitchArgument("listdashboards", false)]
         public bool ListDashboards { get; set; }
 
+        [SwitchArgument("listdatasets", false)]
+        public bool ListDatasets { get; set; }
+
         [SwitchArgument("listtiles", false)]
         public bool ListTiles { get; set; }
 
