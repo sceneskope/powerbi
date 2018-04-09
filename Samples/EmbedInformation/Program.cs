@@ -35,6 +35,9 @@ namespace EmbedInformation
                             cts.Cancel();
                         };
 
+                        ServiceClientTracing.IsEnabled = true;
+                        ServiceClientTracing.AddTracingInterceptor(new ConsoleTracingInterceptor());
+
                         RunAsync(arguments, cts.Token).GetAwaiter().GetResult();
                     }
                 }
@@ -52,7 +55,7 @@ namespace EmbedInformation
 
         private static async Task RunAsync(Arguments arguments, CancellationToken ct)
         {
-            DeviceCodeTokenProvider tokenProvider;
+            ITokenProvider tokenProvider;
             if (!string.IsNullOrWhiteSpace(arguments.TokenFile) && File.Exists(arguments.TokenFile))
             {
                 var configuration = JsonConvert.DeserializeObject<ClientConfiguration>(File.ReadAllText(arguments.TokenFile));
@@ -138,9 +141,14 @@ namespace EmbedInformation
                 Console.WriteLine($"Tile Token: {JsonConvert.SerializeObject(token)}");
             }
 
-            if (!string.IsNullOrWhiteSpace(arguments.TokenFile))
+            if (arguments.GetParameters && !string.IsNullOrWhiteSpace(arguments.DatasetId)) {
+                var parameters = await (noGroup ? powerBIClient.Datasets.GetParametersAsync(arguments.DatasetId, ct) : powerBIClient.Datasets.GetParametersInGroupAsync(arguments.GroupId, arguments.DatasetId, ct)).ConfigureAwait(false);
+                Console.WriteLine($"Parameters: {JsonConvert.SerializeObject(parameters)}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(arguments.TokenFile) && tokenProvider is DeviceCodeTokenProvider deviceCodeProvider)
             {
-                var state = tokenProvider.GetSerializedState();
+                var state = deviceCodeProvider.GetSerializedState();
                 var clientConfiguration = new ClientConfiguration { ClientId = arguments.ClientId, TokenCacheState = state };
                 File.WriteAllText(arguments.TokenFile, JsonConvert.SerializeObject(clientConfiguration));
             }
