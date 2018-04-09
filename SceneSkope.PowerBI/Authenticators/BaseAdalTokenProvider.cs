@@ -4,11 +4,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Rest;
+using Newtonsoft.Json;
 
 namespace SceneSkope.PowerBI.Authenticators
 {
     public abstract class BaseAdalTokenProvider : ITokenProvider
     {
+        static BaseAdalTokenProvider() {
+            LoggerCallbackHandler.UseDefaultLogging = false;
+        }
+
         private static readonly TimeSpan ExpirationThreshold = TimeSpan.FromMinutes(5);
 
         public string AuthorityUri { get; set; } = "https://login.windows.net/common/oauth2/authorize";
@@ -71,7 +76,8 @@ namespace SceneSkope.PowerBI.Authenticators
         public async Task<AuthenticationHeaderValue> GetAuthenticationHeaderAsync(CancellationToken cancellationToken)
         {
             var token = await GetAccessTokenAsync(cancellationToken).ConfigureAwait(false);
-            return new AuthenticationHeaderValue(LatestResult.AccessTokenType, LatestResult.AccessToken);
+            var result = new AuthenticationHeaderValue(LatestResult.AccessTokenType, LatestResult.AccessToken);
+            return result;
         }
     }
 }
