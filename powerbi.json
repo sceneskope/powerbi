@@ -53,8 +53,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "dataset",
             "in": "body",
             "description": "Create dataset parameters",
@@ -69,7 +68,7 @@
             "description": "Default retention policy",
             "required": false,
             "type": "string",
-            "enum": [ "None", "basicFIFO" ],
+            "enum": ["None", "basicFIFO"],
             "x-ms-enum": {
               "name": "DefaultRetentionPolicy",
               "modelAsString": true
@@ -106,15 +105,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "datasetKey",
-            "description": "The dataset id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "datasetKey",
+          "description": "The dataset id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -137,15 +134,13 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
-            "name": "datasetKey",
-            "description": "The dataset id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "datasetKey",
+          "description": "The dataset id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -170,15 +165,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "datasetKey",
-            "description": "The dataset id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "datasetKey",
+          "description": "The dataset id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -203,8 +196,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "datasetKey",
             "in": "path",
             "description": "The dataset id",
@@ -252,8 +244,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "datasetKey",
             "in": "path",
             "required": true,
@@ -299,8 +290,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "datasetKey",
             "in": "path",
             "description": "The dataset id",
@@ -337,8 +327,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "datasetKey",
             "description": "The dataset id",
             "in": "path",
@@ -369,19 +358,15 @@
         ],
         "operationId": "Datasets_RefreshDataset",
         "summary": "Start a dataset refresh",
-        "consumes": [
-        ],
-        "produces": [
-        ],
-        "parameters": [
-          {
-            "name": "datasetKey",
-            "description": "The dataset id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "datasetKey",
+          "description": "The dataset id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "202": {
             "description": "Accepted",
@@ -406,14 +391,12 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "datasetKey",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "datasetKey",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -438,8 +421,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "datasetKey",
             "in": "path",
             "required": true,
@@ -478,14 +460,12 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "datasetKey",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "datasetKey",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -510,8 +490,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "datasetKey",
             "in": "path",
             "required": true,
@@ -550,8 +529,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "datasetKey",
             "in": "path",
             "description": "The dataset id",
@@ -592,8 +570,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "datasetKey",
             "in": "path",
             "description": "The dataset id",
@@ -634,15 +611,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "datasetKey",
-            "description": "The dataset id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "datasetKey",
+          "description": "The dataset id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -667,15 +642,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "datasetKey",
-            "description": "The dataset id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "datasetKey",
+          "description": "The dataset id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -725,8 +698,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "datasetDisplayName",
             "in": "query",
             "required": true,
@@ -788,15 +760,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "importId",
-            "in": "path",
-            "required": true,
-            "description": "The import id",
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "importId",
+          "in": "path",
+          "required": true,
+          "description": "The import id",
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -871,15 +841,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "reportKey",
-            "description": "The report id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "reportKey",
+          "description": "The report id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -902,15 +870,13 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
-            "name": "reportKey",
-            "description": "The report id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "reportKey",
+          "description": "The report id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -935,8 +901,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "reportKey",
             "description": "The report id",
             "in": "path",
@@ -975,15 +940,13 @@
         "produces": [
           "application/zip"
         ],
-        "parameters": [
-          {
-            "name": "reportKey",
-            "in": "path",
-            "description": "The report id",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "reportKey",
+          "in": "path",
+          "description": "The report id",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "schema": {
@@ -1008,8 +971,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "reportKey",
             "description": "The report id",
             "in": "path",
@@ -1050,8 +1012,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "reportKey",
             "in": "path",
             "description": "The report id",
@@ -1118,17 +1079,15 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "requestParameters",
-            "description": "Add dashboard parameters",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/AddDashboardRequest"
-            }
+        "parameters": [{
+          "name": "requestParameters",
+          "description": "Add dashboard parameters",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/AddDashboardRequest"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -1153,15 +1112,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "dashboardKey",
-            "description": "The dashboard id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "dashboardKey",
+          "description": "The dashboard id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -1186,15 +1143,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "dashboardKey",
-            "description": "The dashboard id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "dashboardKey",
+          "description": "The dashboard id",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -1219,8 +1174,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "dashboardKey",
             "description": "The dashboard id",
             "in": "path",
@@ -1259,8 +1213,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "dashboardKey",
             "description": "The dashboard id",
             "in": "path",
@@ -1309,17 +1262,15 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "requestParameters",
-            "description": "Generate token parameters",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/GenerateTokenRequest"
-            }
+        "parameters": [{
+          "name": "requestParameters",
+          "description": "Generate token parameters",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/GenerateTokenRequest"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -1344,8 +1295,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "reportKey",
             "description": "The report id",
             "in": "path",
@@ -1386,8 +1336,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "dashboardKey",
             "description": "The dashboard id",
             "in": "path",
@@ -1428,8 +1377,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "dashboardKey",
             "description": "The dashboard id",
             "in": "path",
@@ -1478,15 +1426,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "description": "The group id",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "groupId",
+          "in": "path",
+          "description": "The group id",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -1509,8 +1455,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "description": "The group id",
@@ -1557,8 +1502,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -1595,8 +1539,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -1635,8 +1578,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -1675,8 +1617,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -1731,8 +1672,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -1785,8 +1725,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -1830,8 +1769,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -1869,12 +1807,9 @@
         ],
         "operationId": "Datasets_RefreshDatasetInGroup",
         "summary": "Start a dataset refresh",
-        "consumes": [
-        ],
-        "produces": [
-        ],
-        "parameters": [
-          {
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -1913,8 +1848,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -1952,8 +1886,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -1999,8 +1932,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2038,8 +1970,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2085,8 +2016,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2134,8 +2064,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2183,8 +2112,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2223,8 +2151,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2259,8 +2186,7 @@
         "summary": "Take Over a dataset",
         "consumes": [],
         "produces": [],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2300,15 +2226,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "description": "The group id",
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "groupId",
+          "in": "path",
+          "required": true,
+          "description": "The group id",
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -2331,8 +2255,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2392,8 +2315,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2431,15 +2353,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "description": "The group id",
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "groupId",
+          "in": "path",
+          "required": true,
+          "description": "The group id",
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -2464,15 +2384,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "description": "The group id",
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "groupId",
+          "in": "path",
+          "required": true,
+          "description": "The group id",
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -2494,8 +2412,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2532,8 +2449,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2572,8 +2488,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2619,8 +2534,7 @@
         "produces": [
           "application/zip"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2659,8 +2573,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2708,8 +2621,7 @@
         "produces": [
 
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2758,15 +2670,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "description": "The group id",
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "groupId",
+          "in": "path",
+          "required": true,
+          "description": "The group id",
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -2789,8 +2699,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2831,8 +2740,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2871,8 +2779,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2911,8 +2818,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -2958,8 +2864,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -3015,8 +2920,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -3057,8 +2961,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -3106,8 +3009,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -3155,8 +3057,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -3204,8 +3105,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -3282,15 +3182,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "gatewayId",
-            "in": "path",
-            "description": "The gateway id",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "gatewayId",
+          "in": "path",
+          "description": "The gateway id",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -3313,15 +3211,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "gatewayId",
-            "in": "path",
-            "description": "The gateway id",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "gatewayId",
+          "in": "path",
+          "description": "The gateway id",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -3344,8 +3240,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "gatewayId",
             "in": "path",
             "description": "The gateway id",
@@ -3383,8 +3278,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "gatewayId",
             "in": "path",
             "description": "The gateway id",
@@ -3416,8 +3310,7 @@
         "summary": "Delete a datasource",
         "consumes": [],
         "produces": [],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "gatewayId",
             "in": "path",
             "description": "The gateway id",
@@ -3449,8 +3342,7 @@
         "summary": "Update a datasource credentials",
         "consumes": [],
         "produces": [],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "gatewayId",
             "in": "path",
             "description": "The gateway id",
@@ -3495,8 +3387,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "gatewayId",
             "in": "path",
             "description": "The gateway id",
@@ -3532,8 +3423,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "name": "gatewayId",
             "in": "path",
             "description": "The gateway id",
@@ -3566,10 +3456,8 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-        ],
-        "parameters": [
-          {
+        "produces": [],
+        "parameters": [{
             "name": "gatewayId",
             "in": "path",
             "description": "The gateway id",
@@ -3614,10 +3502,8 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-        ],
-        "parameters": [
-          {
+        "produces": [],
+        "parameters": [{
             "name": "gatewayId",
             "in": "path",
             "description": "The gateway id",
@@ -3688,17 +3574,15 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "requestParameters",
-            "description": "Create group request parameters",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/GroupCreationRequest"
-            }
+        "parameters": [{
+          "name": "requestParameters",
+          "description": "Create group request parameters",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/GroupCreationRequest"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -3717,19 +3601,15 @@
         ],
         "summary": "Deletes the specified group",
         "operationId": "Groups_DeleteGroup",
-        "consumes": [
-        ],
-        "produces": [
-        ],
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "description": "The group id to delete",
-            "type": "string"
-          }
-        ],
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "groupId",
+          "in": "path",
+          "required": true,
+          "description": "The group id to delete",
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -3752,15 +3632,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "description": "The group id",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "groupId",
+          "in": "path",
+          "description": "The group id",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -3779,10 +3657,8 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-        ],
-        "parameters": [
-          {
+        "produces": [],
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "description": "The group id",
@@ -3817,12 +3693,9 @@
         ],
         "summary": "Deletes the specified group",
         "operationId": "Groups_DeleteUserInGroup",
-        "consumes": [
-        ],
-        "produces": [
-        ],
-        "parameters": [
-          {
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "required": true,
@@ -3858,10 +3731,8 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-        ],
-        "parameters": [
-          {
+        "produces": [],
+        "parameters": [{
             "name": "groupId",
             "in": "path",
             "description": "The group id",
@@ -3899,19 +3770,16 @@
         "consumes": [
           "application/json"
         ],
-        "produces": [
-        ],
-        "parameters": [
-          {
-            "name": "requestParameters",
-            "in": "body",
-            "description": "Assign to capacity parameters",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/AssignToCapacityRequest"
-            }
+        "produces": [],
+        "parameters": [{
+          "name": "requestParameters",
+          "in": "body",
+          "description": "Assign to capacity parameters",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/AssignToCapacityRequest"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -3937,14 +3805,12 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "datasetKey",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "datasetKey",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "OK",
@@ -4092,7 +3958,7 @@
         "defaultRetentionPolicy": {
           "type": "string",
           "description": "The dataset default data retention policy",
-          "enum": [ "None", "basicFIFO" ],
+          "enum": ["None", "basicFIFO"],
           "x-ms-enum": {
             "name": "DefaultRetentionPolicy",
             "modelAsString": true
@@ -4323,7 +4189,7 @@
       }
     },
     "Measure": {
-      "required": [ "name", "expression" ],
+      "required": ["name", "expression"],
       "properties": {
         "name": {
           "type": "string",
@@ -4344,7 +4210,7 @@
       }
     },
     "Relationship": {
-      "required": [ "name", "fromTable", "fromColumn", "toTable", "toColumn" ],
+      "required": ["name", "fromTable", "fromColumn", "toTable", "toColumn"],
       "properties": {
         "name": {
           "type": "string",
@@ -4353,7 +4219,7 @@
         "crossFilteringBehavior": {
           "type": "string",
           "description": "The filter direction",
-          "enum": [ "OneDirection", "BothDirections", "Automatic" ],
+          "enum": ["OneDirection", "BothDirections", "Automatic"],
           "x-ms-enum": {
             "name": "CrossFilteringBehavior",
             "modelAsString": true
