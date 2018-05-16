@@ -5,6 +5,7 @@ A dotnet core client for using the PowerBI Rest API.
 Designed to work with the latest Active Directory authentication that
 does not support username and password.
 
+The API is now generated from the swagger definitions!
 
 
 ## GetDeviceCode

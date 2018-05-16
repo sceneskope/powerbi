@@ -10,6 +10,9 @@ namespace EmbedInformation
         [ValueArgument(typeof(string), "group", Optional = true)]
         public string GroupId { get; set; }
 
+        [ValueArgument(typeof(string), "dataset", Optional = true)]
+        public string DatasetId { get; set; }
+
         [ValueArgument(typeof(string), "dashboard", Optional = true)]
         public string DashboardId { get; set; }
 
@@ -27,6 +30,12 @@ namespace EmbedInformation
 
         [SwitchArgument("listdashboards", false)]
         public bool ListDashboards { get; set; }
+
+        [SwitchArgument("listdatasets", false)]
+        public bool ListDatasets { get; set; }
+
+        [SwitchArgument("getparameters", false)]
+        public bool GetParameters { get; set; }
 
         [SwitchArgument("listtiles", false)]
         public bool ListTiles { get; set; }

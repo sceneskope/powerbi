@@ -1,12 +1,13 @@
-﻿using Newtonsoft.Json;
-using SceneSkope.PowerBI;
-using SceneSkope.PowerBI.Authenticators;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Rest;
+using Newtonsoft.Json;
+using SceneSkope.PowerBI;
+using SceneSkope.PowerBI.Authenticators;
 
 namespace RefreshDataset
 {
@@ -55,51 +56,43 @@ namespace RefreshDataset
 
         private static async Task RunAsync(Arguments arguments, CancellationToken ct)
         {
-            using (var httpClient = new HttpClient())
+            DeviceCodeTokenProvider authenticator;
+            if (!string.IsNullOrWhiteSpace(arguments.TokenFile) && File.Exists(arguments.TokenFile))
             {
-                DeviceCodeAuthenticator authenticator;
-                if (!string.IsNullOrWhiteSpace(arguments.TokenFile) && File.Exists(arguments.TokenFile))
-                {
-                    var configuration = JsonConvert.DeserializeObject<ClientConfiguration>(File.ReadAllText(arguments.TokenFile));
-                    authenticator = new DeviceCodeAuthenticator(configuration.ClientId, configuration.TokenCacheState);
-                }
-                else
-                {
-                    authenticator = new DeviceCodeAuthenticator(arguments.ClientId,
-                                    (url, deviceCode) => Console.WriteLine($"Go to {url} and enter device code {deviceCode}"));
-                }
+                var configuration = JsonConvert.DeserializeObject<ClientConfiguration>(File.ReadAllText(arguments.TokenFile));
+                authenticator = new DeviceCodeTokenProvider(configuration.ClientId, configuration.TokenCacheState);
+            }
+            else
+            {
+                authenticator = new DeviceCodeTokenProvider(arguments.ClientId,
+                                (url, deviceCode) => Console.WriteLine($"Go to {url} and enter device code {deviceCode}"));
+            }
 
-                var powerBIClient = new PowerBIClient(httpClient, authenticator)
-                {
-                    UseBeta = true
-                };
+            var credentials = new TokenCredentials(authenticator);
+            var powerBIClient = new PowerBIClient(credentials);
 
-                if (!string.IsNullOrWhiteSpace(arguments.GroupId))
-                {
-                    powerBIClient = powerBIClient.CreateGroupClient(arguments.GroupId);
-                }
+            var hasGroup = !string.IsNullOrWhiteSpace(arguments.GroupId);
 
-                if (string.IsNullOrWhiteSpace(arguments.DatasetId))
+            if (string.IsNullOrWhiteSpace(arguments.DatasetId))
+            {
+                var datasets = await (hasGroup ? powerBIClient.Datasets.GetDatasetsAsync(ct) : powerBIClient.Datasets.GetDatasetsInGroupAsync(arguments.GroupId, ct)).ConfigureAwait(false);
+                foreach (var dataset in datasets.Value)
                 {
-                    var datasets = await powerBIClient.ListAllDatasetsAsync(ct).ConfigureAwait(false);
-                    foreach (var dataset in datasets)
-                    {
-                        Console.WriteLine($"{dataset.Name} = {dataset.Id}");
-                    }
+                    Console.WriteLine($"{dataset.Name} = {dataset.Id}");
                 }
-                else
-                {
-                    Console.WriteLine("About to refresh the dataset");
-                    await powerBIClient.RefreshDatasetAsync(arguments.DatasetId, ct).ConfigureAwait(false);
-                    Console.WriteLine("Refreshed the dataset");
-                }
+            }
+            else
+            {
+                Console.WriteLine("About to refresh the dataset");
+                await (hasGroup ? powerBIClient.Datasets.RefreshDatasetAsync(arguments.DatasetId, ct) : powerBIClient.Datasets.RefreshDatasetInGroupAsync(arguments.GroupId, arguments.DatasetId, ct)).ConfigureAwait(false);
+                Console.WriteLine("Refreshed the dataset");
+            }
 
-                if (!string.IsNullOrWhiteSpace(arguments.TokenFile))
-                {
-                    var state = authenticator.GetSerializedState();
-                    var clientConfiguration = new ClientConfiguration { ClientId = arguments.ClientId, TokenCacheState = state };
-                    File.WriteAllText(arguments.TokenFile, JsonConvert.SerializeObject(clientConfiguration));
-                }
+            if (!string.IsNullOrWhiteSpace(arguments.TokenFile))
+            {
+                var state = authenticator.GetSerializedState();
+                var clientConfiguration = new ClientConfiguration { ClientId = arguments.ClientId, TokenCacheState = state };
+                File.WriteAllText(arguments.TokenFile, JsonConvert.SerializeObject(clientConfiguration));
             }
         }
     }
