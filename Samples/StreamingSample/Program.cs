@@ -38,7 +38,9 @@ namespace StreamingSample
                 }
                 catch (Exception ex)
                 {
+#pragma warning disable ERP023 // Only ex.Message property was observed in exception block!
                     Console.WriteLine($"Error: {ex.Message}");
+#pragma warning restore ERP023 // Only ex.Message property was observed in exception block!
                 }
             }
             if (Debugger.IsAttached)
