@@ -10,7 +10,7 @@ namespace SceneSkope.PowerBI.Models
     using System.Linq;
 
     /// <summary>
-    /// A Power BI Tile
+    /// A Power BI tile
     /// </summary>
     public partial class Tile
     {
@@ -31,9 +31,12 @@ namespace SceneSkope.PowerBI.Models
         /// <param name="colSpan">number of columns a tile should span</param>
         /// <param name="embedUrl">The tile embed url</param>
         /// <param name="embedData">The tile embed data</param>
-        /// <param name="reportId">The report id</param>
-        /// <param name="datasetId">The dataset id</param>
-        public Tile(string id = default(string), string title = default(string), int? rowSpan = default(int?), int? colSpan = default(int?), string embedUrl = default(string), string embedData = default(string), string reportId = default(string), string datasetId = default(string))
+        /// <param name="reportId">The report id. Available only for tiles
+        /// created from a report.</param>
+        /// <param name="datasetId">The dataset id. Available only for tiles
+        /// created from a report or using a dataset; for example, Q&amp;A
+        /// tiles.</param>
+        public Tile(System.Guid id, string title = default(string), int? rowSpan = default(int?), int? colSpan = default(int?), string embedUrl = default(string), string embedData = default(string), System.Guid? reportId = default(System.Guid?), string datasetId = default(string))
         {
             Id = id;
             Title = title;
@@ -55,7 +58,7 @@ namespace SceneSkope.PowerBI.Models
         /// Gets or sets the tile id
         /// </summary>
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        public System.Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the dashboard display name
@@ -88,16 +91,28 @@ namespace SceneSkope.PowerBI.Models
         public string EmbedData { get; set; }
 
         /// <summary>
-        /// Gets or sets the report id
+        /// Gets or sets the report id. Available only for tiles created from a
+        /// report.
         /// </summary>
         [JsonProperty(PropertyName = "reportId")]
-        public string ReportId { get; set; }
+        public System.Guid? ReportId { get; set; }
 
         /// <summary>
-        /// Gets or sets the dataset id
+        /// Gets or sets the dataset id. Available only for tiles created from
+        /// a report or using a dataset; for example, Q&amp;amp;A tiles.
         /// </summary>
         [JsonProperty(PropertyName = "datasetId")]
         public string DatasetId { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            //Nothing to validate
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace SceneSkope.PowerBI.Models
     using System.Linq;
 
     /// <summary>
-    /// A Power BI user details in a group
+    /// A Power BI user access right entry for workspace
     /// </summary>
     public partial class GroupUser
     {
@@ -25,13 +25,21 @@ namespace SceneSkope.PowerBI.Models
         /// <summary>
         /// Initializes a new instance of the GroupUser class.
         /// </summary>
-        /// <param name="userType">Type of user in a group. Possible values
-        /// include: 'None', 'Member', 'Admin'</param>
-        /// <param name="emailAddress">Email address of the user.</param>
-        public GroupUser(string userType = default(string), string emailAddress = default(string))
+        /// <param name="groupUserAccessRight">Access rights user has for the
+        /// workspace. Possible values include: 'None', 'Member', 'Admin',
+        /// 'Contributor'</param>
+        /// <param name="emailAddress">Email address of the user</param>
+        /// <param name="displayName">Display name of the principal</param>
+        /// <param name="identifier">Identifier of the principal</param>
+        /// <param name="principalType">The principal type. Possible values
+        /// include: 'User', 'Group', 'App'</param>
+        public GroupUser(GroupUserAccessRight groupUserAccessRight, string emailAddress = default(string), string displayName = default(string), string identifier = default(string), PrincipalType? principalType = default(PrincipalType?))
         {
-            UserType = userType;
+            GroupUserAccessRight = groupUserAccessRight;
             EmailAddress = emailAddress;
+            DisplayName = displayName;
+            Identifier = identifier;
+            PrincipalType = principalType;
             CustomInit();
         }
 
@@ -41,17 +49,45 @@ namespace SceneSkope.PowerBI.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets type of user in a group. Possible values include:
-        /// 'None', 'Member', 'Admin'
+        /// Gets or sets access rights user has for the workspace. Possible
+        /// values include: 'None', 'Member', 'Admin', 'Contributor'
         /// </summary>
-        [JsonProperty(PropertyName = "userType")]
-        public string UserType { get; set; }
+        [JsonProperty(PropertyName = "groupUserAccessRight")]
+        public GroupUserAccessRight GroupUserAccessRight { get; set; }
 
         /// <summary>
-        /// Gets or sets email address of the user.
+        /// Gets or sets email address of the user
         /// </summary>
         [JsonProperty(PropertyName = "emailAddress")]
         public string EmailAddress { get; set; }
 
+        /// <summary>
+        /// Gets or sets display name of the principal
+        /// </summary>
+        [JsonProperty(PropertyName = "displayName")]
+        public string DisplayName { get; set; }
+
+        /// <summary>
+        /// Gets or sets identifier of the principal
+        /// </summary>
+        [JsonProperty(PropertyName = "identifier")]
+        public string Identifier { get; set; }
+
+        /// <summary>
+        /// Gets or sets the principal type. Possible values include: 'User',
+        /// 'Group', 'App'
+        /// </summary>
+        [JsonProperty(PropertyName = "principalType")]
+        public PrincipalType? PrincipalType { get; set; }
+
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using CommandLineParser.Arguments;
+﻿using System;
+using CommandLineParser.Arguments;
 
 namespace RefreshDataset
 {
@@ -8,7 +9,9 @@ namespace RefreshDataset
         public string ClientId { get; set; }
 
         [ValueArgument(typeof(string), "group", Optional = true)]
-        public string GroupId { get; set; }
+        public string Group { get; set; }
+
+        public Guid GroupId => Guid.Parse(Group);
 
         [ValueArgument(typeof(string), "dataset", Optional = true)]
         public string DatasetId { get; set; }

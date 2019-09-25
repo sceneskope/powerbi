@@ -17,7 +17,7 @@ namespace SceneSkope.PowerBI
     /// <summary>
     /// Client wrapper for Power BI Imports REST Api
     /// </summary>
-    public partial class Imports : IServiceOperations<PowerBIClient>, IImports
+    public partial class ImportsOperations : IImportsOperations
     {
         private const int MB = 1024 * 1024;
         private const int GB = 1024 * MB;
@@ -45,11 +45,13 @@ namespace SceneSkope.PowerBI
         /// <param name="cancellationToken">
         /// Optional cancellation token
         /// </param>
-        public Task<HttpOperationResponse<Import>> PostImportFileWithHttpMessage(Stream file, string datasetDisplayName = default, string nameConflict = default, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default) => PostImportFileWithHttpMessage(
+        public Task<HttpOperationResponse<Import>> PostImportFileWithHttpMessage(Stream file, string datasetDisplayName = default, ImportConflictHandlerMode? nameConflict = default, bool? skipReport = default, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default) =>
+            PostImportFileWithHttpMessage(
                             groupId: null,
                             file: file,
                             datasetDisplayName: datasetDisplayName,
                             nameConflict: nameConflict,
+                            skipReport: skipReport,
                             customHeaders: customHeaders,
                             cancellationToken: cancellationToken);
 
@@ -74,16 +76,15 @@ namespace SceneSkope.PowerBI
         /// <param name="cancellationToken">
         /// Optional cancellation token
         /// </param>
-        public Task<HttpOperationResponse<Import>> PostImportFileWithHttpMessage(string groupId, Stream file, string datasetDisplayName = default, string nameConflict = default, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default)
+        public Task<HttpOperationResponse<Import>> PostImportFileWithHttpMessage(Guid? groupId, Stream file, string datasetDisplayName = default, ImportConflictHandlerMode? nameConflict = default, bool? skipReport = default, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default)
         {
             // Tracing
-            string _invocationId = null;
             if (ServiceClientTracing.IsEnabled)
             {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                var _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 var tracingParameters = new Dictionary<string, object>
                 {
-                    { "groupId", groupId ?? string.Empty },
+                    { "groupId", groupId },
                     { "file", file },
                     { "datasetDisplayName", datasetDisplayName },
                     { "nameConflict", nameConflict },
@@ -104,27 +105,27 @@ namespace SceneSkope.PowerBI
 
             if (file.Length > 1 * GB)
             {
-                return UploadLargeFile(groupId, file, datasetDisplayName, nameConflict, customHeaders, cancellationToken);
+                return UploadLargeFile(groupId, file, datasetDisplayName, nameConflict, skipReport, customHeaders, cancellationToken);
             }
             else
             {
-                return UploadFile(groupId, file, datasetDisplayName, nameConflict, customHeaders, cancellationToken);
+                return UploadFile(groupId, file, datasetDisplayName, nameConflict, skipReport, customHeaders, cancellationToken);
             }
         }
 
-        private async Task<HttpOperationResponse<Import>> UploadFile(string groupId, Stream file, string datasetDisplayName = default, string nameConflict = default, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default)
+        private async Task<HttpOperationResponse<Import>> UploadFile(Guid? groupId, Stream file, string datasetDisplayName = default, ImportConflictHandlerMode? nameConflict = default, bool? skipReport = default, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default)
         {
             // Tracing
             var _shouldTrace = ServiceClientTracing.IsEnabled;
             const string _invocationId = null;
 
-            var groupsPart = (!string.IsNullOrEmpty(groupId)) ? "v1.0/myorg/groups/{groupId}/imports" : "v1.0/myorg/imports";
+            var groupsPart = groupId.HasValue ? "v1.0/myorg/groups/{groupId}/imports" : "v1.0/myorg/imports";
             var _baseUrl = Client.BaseUri.AbsoluteUri;
             var _url = new Uri(new Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), groupsPart).ToString();
 
-            if (!string.IsNullOrEmpty(groupId))
+            if (groupId.HasValue)
             {
-                _url = _url.Replace("{groupId}", Uri.EscapeDataString(groupId));
+                _url = _url.Replace("{groupId}", groupId.Value.ToString());
             }
 
             var _queryParameters = new List<string>();
@@ -134,8 +135,13 @@ namespace SceneSkope.PowerBI
             }
             if (nameConflict != null)
             {
-                _queryParameters.Add(string.Format("nameConflict={0}", Uri.EscapeDataString(nameConflict)));
+                _queryParameters.Add(string.Format("nameConflict={0}", System.Uri.EscapeDataString(Microsoft.Rest.Serialization.SafeJsonConvert.SerializeObject(nameConflict, Client.SerializationSettings).Trim('"'))));
             }
+            if (skipReport != null)
+            {
+                _queryParameters.Add(string.Format("skipReport={0}", System.Uri.EscapeDataString(Microsoft.Rest.Serialization.SafeJsonConvert.SerializeObject(skipReport, Client.SerializationSettings).Trim('"'))));
+            }
+
             if (_queryParameters.Count > 0)
             {
                 _url += "?" + string.Join("&", _queryParameters);
@@ -143,7 +149,7 @@ namespace SceneSkope.PowerBI
 
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
+            HttpResponseMessage _httpResponse;
             _httpRequest.Method = new HttpMethod("POST");
             _httpRequest.RequestUri = new Uri(_url);
             // Set Headers
@@ -230,7 +236,7 @@ namespace SceneSkope.PowerBI
             return _result;
         }
 
-        private async Task<HttpOperationResponse<Import>> UploadLargeFile(string groupId, Stream file, string datasetDisplayName = default, string nameConflict = default, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default)
+        private async Task<HttpOperationResponse<Import>> UploadLargeFile(Guid? groupId, Stream file, string datasetDisplayName = default, ImportConflictHandlerMode? nameConflict = default, bool? skipReport = default, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default)
         {
             TemporaryUploadLocation temporaryUploadLocation;
 
@@ -240,7 +246,7 @@ namespace SceneSkope.PowerBI
             }
             else
             {
-                temporaryUploadLocation = Client.Imports.CreateTemporaryUploadLocationInGroup(groupId);
+                temporaryUploadLocation = Client.Imports.CreateTemporaryUploadLocationInGroup(groupId.Value);
             }
 
             if (temporaryUploadLocation == null || string.IsNullOrEmpty(temporaryUploadLocation.Url))
@@ -250,23 +256,21 @@ namespace SceneSkope.PowerBI
 
             await UploadFileToBlob(temporaryUploadLocation.Url, file, cancellationToken).ConfigureAwait(false);
 
-            using (var powerBIClient = new PowerBIClient(Client.BaseUri, Client.Credentials))
+            using var powerBIClient = new PowerBIClient(Client.BaseUri, Client.Credentials);
+            powerBIClient.HttpClient.Timeout = new TimeSpan(hours: 0, minutes: PostImportTimeoutInMinutes, seconds: 0);
+
+            if (Path.GetExtension(datasetDisplayName)?.Length == 0)
             {
-                powerBIClient.HttpClient.Timeout = new TimeSpan(hours: 0, minutes: PostImportTimeoutInMinutes, seconds: 0);
+                datasetDisplayName = Path.GetFileNameWithoutExtension(datasetDisplayName) + ".pbix";
+            }
 
-                if (Path.GetExtension(datasetDisplayName)?.Length == 0)
-                {
-                    datasetDisplayName = Path.GetFileNameWithoutExtension(datasetDisplayName) + ".pbix";
-                }
-
-                if (groupId == null)
-                {
-                    return await powerBIClient.Imports.PostImportWithHttpMessagesAsync(datasetDisplayName, new ImportInfo { FileUrl = temporaryUploadLocation.Url }, nameConflict, customHeaders, cancellationToken).ConfigureAwait(false);
-                }
-                else
-                {
-                    return await powerBIClient.Imports.PostImportInGroupWithHttpMessagesAsync(groupId, datasetDisplayName, new ImportInfo { FileUrl = temporaryUploadLocation.Url }, nameConflict, customHeaders, cancellationToken).ConfigureAwait(false);
-                }
+            if (groupId == null)
+            {
+                return await powerBIClient.Imports.PostImportWithHttpMessagesAsync(datasetDisplayName, new ImportInfo { FileUrl = temporaryUploadLocation.Url }, nameConflict, skipReport, customHeaders, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                return await powerBIClient.Imports.PostImportInGroupWithHttpMessagesAsync(groupId.Value, datasetDisplayName, new ImportInfo { FileUrl = temporaryUploadLocation.Url }, nameConflict, skipReport, customHeaders, cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -278,77 +282,73 @@ namespace SceneSkope.PowerBI
             var buffer = new byte[maxBlockSize];
             var i = 1;
 
-            using (var httpClient = new HttpClient())
-            {
-                httpClient.DefaultRequestHeaders.Add("x-ms-version", "2015-04-05");
-                var baseUploadUrl = temporaryUploadLocationUrl + "&comp=block&blockid=";
-                var headers = new Dictionary<string, string>
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("x-ms-version", "2015-04-05");
+            var baseUploadUrl = temporaryUploadLocationUrl + "&comp=block&blockid=";
+            var headers = new Dictionary<string, string>
                 {
                     { "x-ms-blob-type", "BlockBlob" }
                 };
-                do
-                {
-                    var plainTextBytes = System.Text.Encoding.UTF8.GetBytes("block-" + i.ToString("000000"));
-                    var blockId = Convert.ToBase64String(plainTextBytes);
-                    var bytesRead = await file.ReadAsync(buffer, 0, maxBlockSize).ConfigureAwait(false);
+            do
+            {
+                var plainTextBytes = System.Text.Encoding.UTF8.GetBytes("block-" + i.ToString("000000"));
+                var blockId = Convert.ToBase64String(plainTextBytes);
+                var bytesRead = await file.ReadAsync(buffer, 0, maxBlockSize).ConfigureAwait(false);
 
-                    var uploadBlockUrl = baseUploadUrl + blockId;
-                    var content = new ByteArrayContent(buffer, 0, bytesRead);
-                    await SendRequest(httpClient, HttpMethod.Put, uploadBlockUrl, headers, content, HttpStatusCode.Created, cancellationToken).ConfigureAwait(false);
+                var uploadBlockUrl = baseUploadUrl + blockId;
+                var content = new ByteArrayContent(buffer, 0, bytesRead);
+                await SendRequest(httpClient, HttpMethod.Put, uploadBlockUrl, headers, content, HttpStatusCode.Created, cancellationToken).ConfigureAwait(false);
 
-                    blockIds.Add(blockId);
-                    i++;
-                }
-                while (file.Length - file.Position > 0);
-
-                var blockList = new BlockList { BlockIds = blockIds };
-
-                var xsn = new XmlSerializerNamespaces();
-                xsn.Add(string.Empty, string.Empty);
-
-                var serializer = new XmlSerializer(typeof(BlockList));
-                var myWriter = new UTF8StringWriter();
-                serializer.Serialize(myWriter, blockList, xsn);
-                var requestBody = myWriter.ToString();
-
-                headers.Clear();
-                headers.Add("x-ms-blob-content-type", "application/x-zip-compressed");
-                var uploadBlocListkUrl = temporaryUploadLocationUrl + "&comp=blocklist";
-                await SendRequest(httpClient, HttpMethod.Put, uploadBlocListkUrl, headers, new StringContent(requestBody), HttpStatusCode.Created, cancellationToken).ConfigureAwait(false);
+                blockIds.Add(blockId);
+                i++;
             }
+            while (file.Length - file.Position > 0);
+
+            var blockList = new BlockList { BlockIds = blockIds };
+
+            var xsn = new XmlSerializerNamespaces();
+            xsn.Add(string.Empty, string.Empty);
+
+            var serializer = new XmlSerializer(typeof(BlockList));
+            var myWriter = new UTF8StringWriter();
+            serializer.Serialize(myWriter, blockList, xsn);
+            var requestBody = myWriter.ToString();
+
+            headers.Clear();
+            headers.Add("x-ms-blob-content-type", "application/x-zip-compressed");
+            var uploadBlocListkUrl = temporaryUploadLocationUrl + "&comp=blocklist";
+            await SendRequest(httpClient, HttpMethod.Put, uploadBlocListkUrl, headers, new StringContent(requestBody), HttpStatusCode.Created, cancellationToken).ConfigureAwait(false);
         }
 
         private async Task SendRequest(HttpClient client, HttpMethod method, string url, Dictionary<string, string> headers, HttpContent content, HttpStatusCode expectedHttpStatus, CancellationToken cancellationToken)
         {
-            using (var request = new HttpRequestMessage(method, url))
+            using var request = new HttpRequestMessage(method, url)
             {
-                request.Content = content;
+                Content = content
+            };
 
-                if (headers != null)
+            if (headers != null)
+            {
+                foreach (var header in headers)
                 {
-                    foreach (var header in headers)
-                    {
-                        request.Headers.Add(header.Key, header.Value);
-                    }
-                }
-
-                // Send Request
-                if (ServiceClientTracing.IsEnabled)
-                {
-                    ServiceClientTracing.SendRequest(null, request);
-                }
-                cancellationToken.ThrowIfCancellationRequested();
-                using (var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false))
-                {
-                    if (ServiceClientTracing.IsEnabled)
-                    {
-                        ServiceClientTracing.ReceiveResponse(null, response);
-                    }
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    await VerifyStatusCode(response, expectedHttpStatus).ConfigureAwait(false);
+                    request.Headers.Add(header.Key, header.Value);
                 }
             }
+
+            // Send Request
+            if (ServiceClientTracing.IsEnabled)
+            {
+                ServiceClientTracing.SendRequest(null, request);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            using var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            if (ServiceClientTracing.IsEnabled)
+            {
+                ServiceClientTracing.ReceiveResponse(null, response);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+
+            await VerifyStatusCode(response, expectedHttpStatus).ConfigureAwait(false);
         }
 
         private async Task VerifyStatusCode(HttpResponseMessage responseMessage, HttpStatusCode statusCode)

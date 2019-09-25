@@ -1,4 +1,5 @@
-﻿using CommandLineParser.Arguments;
+﻿using System;
+using CommandLineParser.Arguments;
 
 namespace EmbedInformation
 {
@@ -8,19 +9,27 @@ namespace EmbedInformation
         public string ClientId { get; set; }
 
         [ValueArgument(typeof(string), "group", Optional = true)]
-        public string GroupId { get; set; }
+        public string Group { get; set; }
+
+        public Guid GroupId => Guid.Parse(Group);
 
         [ValueArgument(typeof(string), "dataset", Optional = true)]
         public string DatasetId { get; set; }
 
         [ValueArgument(typeof(string), "dashboard", Optional = true)]
-        public string DashboardId { get; set; }
+        public string Dashboard { get; set; }
+
+        public Guid DashboardId => Guid.Parse(Dashboard);
 
         [ValueArgument(typeof(string), "tile", Optional = true)]
-        public string TileId { get; set; }
+        public string Tile { get; set; }
+
+        public Guid TileId => Guid.Parse(Tile);
 
         [ValueArgument(typeof(string), "report", Optional = true)]
-        public string ReportId { get; set; }
+        public string Report { get; set; }
+
+        public Guid ReportId => Guid.Parse(Report);
 
         [ValueArgument(typeof(string), "tokenfile", Optional = false)]
         public string TokenFile { get; set; }

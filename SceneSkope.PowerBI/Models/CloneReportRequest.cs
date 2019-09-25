@@ -6,11 +6,12 @@
 
 namespace SceneSkope.PowerBI.Models
 {
+    using Microsoft.Rest;
     using Newtonsoft.Json;
     using System.Linq;
 
     /// <summary>
-    /// Power BI Clone Report Request
+    /// Power BI clone report request
     /// </summary>
     public partial class CloneReportRequest
     {
@@ -25,12 +26,18 @@ namespace SceneSkope.PowerBI.Models
         /// <summary>
         /// Initializes a new instance of the CloneReportRequest class.
         /// </summary>
-        /// <param name="name">The requested report name</param>
+        /// <param name="name">The new report name</param>
         /// <param name="targetWorkspaceId">Optional parameter for specifying
-        /// the target workspace id</param>
+        /// the target workspace id. Empty Guid
+        /// (00000000-0000-0000-0000-000000000000) indicates 'My Workspace'.
+        /// &lt;br/&gt;If not provided, the new report will be cloned within
+        /// the same workspace as the source report.</param>
         /// <param name="targetModelId">Optional parameter for specifying the
-        /// target associated model (dataset) id</param>
-        public CloneReportRequest(string name = default(string), string targetWorkspaceId = default(string), string targetModelId = default(string))
+        /// target associated dataset id. &lt;br/&gt;If not provided, the new
+        /// report will be associated with the same dataset as the source
+        /// report and it must be cloned within the same workspace as the
+        /// source report.</param>
+        public CloneReportRequest(string name, System.Guid? targetWorkspaceId = default(System.Guid?), string targetModelId = default(string))
         {
             Name = name;
             TargetWorkspaceId = targetWorkspaceId;
@@ -44,24 +51,42 @@ namespace SceneSkope.PowerBI.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets the requested report name
+        /// Gets or sets the new report name
         /// </summary>
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets optional parameter for specifying the target workspace
-        /// id
+        /// id. Empty Guid (00000000-0000-0000-0000-000000000000) indicates 'My
+        /// Workspace'. &amp;lt;br/&amp;gt;If not provided, the new report will
+        /// be cloned within the same workspace as the source report.
         /// </summary>
         [JsonProperty(PropertyName = "targetWorkspaceId")]
-        public string TargetWorkspaceId { get; set; }
+        public System.Guid? TargetWorkspaceId { get; set; }
 
         /// <summary>
         /// Gets or sets optional parameter for specifying the target
-        /// associated model (dataset) id
+        /// associated dataset id. &amp;lt;br/&amp;gt;If not provided, the new
+        /// report will be associated with the same dataset as the source
+        /// report and it must be cloned within the same workspace as the
+        /// source report.
         /// </summary>
         [JsonProperty(PropertyName = "targetModelId")]
         public string TargetModelId { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (Name == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "Name");
+            }
+        }
     }
 }

@@ -6,11 +6,12 @@
 
 namespace SceneSkope.PowerBI.Models
 {
+    using Microsoft.Rest;
     using Newtonsoft.Json;
     using System.Linq;
 
     /// <summary>
-    /// Power BI Embed Token
+    /// Power BI embed token
     /// </summary>
     public partial class EmbedToken
     {
@@ -25,10 +26,12 @@ namespace SceneSkope.PowerBI.Models
         /// <summary>
         /// Initializes a new instance of the EmbedToken class.
         /// </summary>
-        /// <param name="token">Embed token.</param>
-        /// <param name="tokenId">Unique token Id.</param>
-        /// <param name="expiration">Expiration time of token - in UTC.</param>
-        public EmbedToken(string token = default(string), string tokenId = default(string), System.DateTime? expiration = default(System.DateTime?))
+        /// <param name="token">Embed token</param>
+        /// <param name="tokenId">Unique token Id. Can be used to correlate
+        /// operations that use this token with the generate operation through
+        /// audit logs.</param>
+        /// <param name="expiration">Expiration time of token. In UTC.</param>
+        public EmbedToken(string token, System.Guid tokenId, System.DateTime expiration)
         {
             Token = token;
             TokenId = tokenId;
@@ -42,22 +45,36 @@ namespace SceneSkope.PowerBI.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets embed token.
+        /// Gets or sets embed token
         /// </summary>
         [JsonProperty(PropertyName = "token")]
         public string Token { get; set; }
 
         /// <summary>
-        /// Gets or sets unique token Id.
+        /// Gets or sets unique token Id. Can be used to correlate operations
+        /// that use this token with the generate operation through audit logs.
         /// </summary>
         [JsonProperty(PropertyName = "tokenId")]
-        public string TokenId { get; set; }
+        public System.Guid TokenId { get; set; }
 
         /// <summary>
-        /// Gets or sets expiration time of token - in UTC.
+        /// Gets or sets expiration time of token. In UTC.
         /// </summary>
         [JsonProperty(PropertyName = "expiration")]
-        public System.DateTime? Expiration { get; set; }
+        public System.DateTime Expiration { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (Token == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "Token");
+            }
+        }
     }
 }

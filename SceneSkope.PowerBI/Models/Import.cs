@@ -28,7 +28,7 @@ namespace SceneSkope.PowerBI.Models
         /// Initializes a new instance of the Import class.
         /// </summary>
         /// <param name="id">The import id</param>
-        /// <param name="name">The import name name</param>
+        /// <param name="name">The import name</param>
         /// <param name="importState">The import upload state</param>
         /// <param name="reports">The reports associated with this
         /// import</param>
@@ -36,7 +36,7 @@ namespace SceneSkope.PowerBI.Models
         /// import</param>
         /// <param name="createdDateTime">Import creation time</param>
         /// <param name="updatedDateTime">Import last update time</param>
-        public Import(string id = default(string), string name = default(string), string importState = default(string), IList<Report> reports = default(IList<Report>), IList<Dataset> datasets = default(IList<Dataset>), System.DateTime? createdDateTime = default(System.DateTime?), System.DateTime? updatedDateTime = default(System.DateTime?))
+        public Import(System.Guid id, string name = default(string), string importState = default(string), IList<Report> reports = default(IList<Report>), IList<Dataset> datasets = default(IList<Dataset>), System.DateTime? createdDateTime = default(System.DateTime?), System.DateTime? updatedDateTime = default(System.DateTime?))
         {
             Id = id;
             Name = name;
@@ -57,10 +57,10 @@ namespace SceneSkope.PowerBI.Models
         /// Gets or sets the import id
         /// </summary>
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        public System.Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the import name name
+        /// Gets or sets the import name
         /// </summary>
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
@@ -95,5 +95,34 @@ namespace SceneSkope.PowerBI.Models
         [JsonProperty(PropertyName = "updatedDateTime")]
         public System.DateTime? UpdatedDateTime { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (Reports != null)
+            {
+                foreach (var element in Reports)
+                {
+                    if (element != null)
+                    {
+                        element.Validate();
+                    }
+                }
+            }
+            if (Datasets != null)
+            {
+                foreach (var element1 in Datasets)
+                {
+                    if (element1 != null)
+                    {
+                        element1.Validate();
+                    }
+                }
+            }
+        }
     }
 }

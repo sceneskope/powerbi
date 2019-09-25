@@ -11,7 +11,7 @@ namespace SceneSkope.PowerBI.Models
     using System.Linq;
 
     /// <summary>
-    /// A Power BI Column
+    /// A dataset column
     /// </summary>
     public partial class Column
     {
@@ -27,27 +27,11 @@ namespace SceneSkope.PowerBI.Models
         /// Initializes a new instance of the Column class.
         /// </summary>
         /// <param name="name">The column name</param>
-        /// <param name="dataType">The column data type. Possible values
-        /// include: 'Int64', 'Double', 'Boolean', 'Datetime', 'String',
-        /// 'Decimal'</param>
-        /// <param name="formatString">A string describing how the value should
-        /// be formatted when it is displayed</param>
-        /// <param name="sortByColumn">String name of a column to be used to
-        /// order the current column</param>
-        /// <param name="dataCategory">Data category that descriubes the data
-        /// within the column</param>
-        /// <param name="isHidden">Is the columne hidden from view</param>
-        /// <param name="summarizeBy">Default aggregation method for the
-        /// column</param>
-        public Column(string name, string dataType, string formatString = default(string), string sortByColumn = default(string), string dataCategory = default(string), bool? isHidden = default(bool?), string summarizeBy = default(string))
+        /// <param name="dataType">The column data type</param>
+        public Column(string name, string dataType)
         {
             Name = name;
             DataType = dataType;
-            FormatString = formatString;
-            SortByColumn = sortByColumn;
-            DataCategory = dataCategory;
-            IsHidden = isHidden;
-            SummarizeBy = summarizeBy;
             CustomInit();
         }
 
@@ -63,44 +47,10 @@ namespace SceneSkope.PowerBI.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the column data type. Possible values include:
-        /// 'Int64', 'Double', 'Boolean', 'Datetime', 'String', 'Decimal'
+        /// Gets or sets the column data type
         /// </summary>
         [JsonProperty(PropertyName = "dataType")]
         public string DataType { get; set; }
-
-        /// <summary>
-        /// Gets or sets a string describing how the value should be formatted
-        /// when it is displayed
-        /// </summary>
-        [JsonProperty(PropertyName = "formatString")]
-        public string FormatString { get; set; }
-
-        /// <summary>
-        /// Gets or sets string name of a column to be used to order the
-        /// current column
-        /// </summary>
-        [JsonProperty(PropertyName = "sortByColumn")]
-        public string SortByColumn { get; set; }
-
-        /// <summary>
-        /// Gets or sets data category that descriubes the data within the
-        /// column
-        /// </summary>
-        [JsonProperty(PropertyName = "dataCategory")]
-        public string DataCategory { get; set; }
-
-        /// <summary>
-        /// Gets or sets is the columne hidden from view
-        /// </summary>
-        [JsonProperty(PropertyName = "isHidden")]
-        public bool? IsHidden { get; set; }
-
-        /// <summary>
-        /// Gets or sets default aggregation method for the column
-        /// </summary>
-        [JsonProperty(PropertyName = "summarizeBy")]
-        public string SummarizeBy { get; set; }
 
         /// <summary>
         /// Validate the object.

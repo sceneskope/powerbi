@@ -10,7 +10,7 @@ namespace SceneSkope.PowerBI.Models
     using System.Linq;
 
     /// <summary>
-    /// Power BI Assign to Capacity Request
+    /// Power BI assign to capacity request
     /// </summary>
     public partial class AssignToCapacityRequest
     {
@@ -25,8 +25,10 @@ namespace SceneSkope.PowerBI.Models
         /// <summary>
         /// Initializes a new instance of the AssignToCapacityRequest class.
         /// </summary>
-        /// <param name="capacityId">The capacity id</param>
-        public AssignToCapacityRequest(string capacityId = default(string))
+        /// <param name="capacityId">The capacity id. To unassign from
+        /// capacity, use Empty Guid
+        /// (00000000-0000-0000-0000-000000000000).</param>
+        public AssignToCapacityRequest(System.Guid capacityId)
         {
             CapacityId = capacityId;
             CustomInit();
@@ -38,10 +40,21 @@ namespace SceneSkope.PowerBI.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets the capacity id
+        /// Gets or sets the capacity id. To unassign from capacity, use Empty
+        /// Guid (00000000-0000-0000-0000-000000000000).
         /// </summary>
         [JsonProperty(PropertyName = "capacityId")]
-        public string CapacityId { get; set; }
+        public System.Guid CapacityId { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            //Nothing to validate
+        }
     }
 }

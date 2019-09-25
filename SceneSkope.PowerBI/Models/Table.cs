@@ -30,14 +30,14 @@ namespace SceneSkope.PowerBI.Models
         /// </summary>
         /// <param name="name">The table name</param>
         /// <param name="columns">The column schema for this table</param>
-        /// <param name="measures">The measures schema for this table</param>
-        /// <param name="rows">The data rows within this tabe</param>
-        public Table(string name, IList<Column> columns, IList<Measure> measures = default(IList<Measure>), IList<Row> rows = default(IList<Row>))
+        /// <param name="rows">The data rows within this table</param>
+        /// <param name="measures">The measures within this table</param>
+        public Table(string name, IList<Column> columns, IList<Row> rows = default(IList<Row>), IList<Measure> measures = default(IList<Measure>))
         {
             Name = name;
             Columns = columns;
-            Measures = measures;
             Rows = rows;
+            Measures = measures;
             CustomInit();
         }
 
@@ -59,16 +59,16 @@ namespace SceneSkope.PowerBI.Models
         public IList<Column> Columns { get; set; }
 
         /// <summary>
-        /// Gets or sets the measures schema for this table
-        /// </summary>
-        [JsonProperty(PropertyName = "measures")]
-        public IList<Measure> Measures { get; set; }
-
-        /// <summary>
-        /// Gets or sets the data rows within this tabe
+        /// Gets or sets the data rows within this table
         /// </summary>
         [JsonProperty(PropertyName = "rows")]
         public IList<Row> Rows { get; set; }
+
+        /// <summary>
+        /// Gets or sets the measures within this table
+        /// </summary>
+        [JsonProperty(PropertyName = "measures")]
+        public IList<Measure> Measures { get; set; }
 
         /// <summary>
         /// Validate the object.

@@ -6,11 +6,12 @@
 
 namespace SceneSkope.PowerBI.Models
 {
+    using Microsoft.Rest;
     using Newtonsoft.Json;
     using System.Linq;
 
     /// <summary>
-    /// Power BI Update Report Content Request
+    /// Power BI update report content request
     /// </summary>
     public partial class TemporaryUploadLocation
     {
@@ -25,11 +26,11 @@ namespace SceneSkope.PowerBI.Models
         /// <summary>
         /// Initializes a new instance of the TemporaryUploadLocation class.
         /// </summary>
-        /// <param name="url">The SAS url for the temporary blob
-        /// storage</param>
-        /// <param name="expirationTime">The expiration time of the SAS
-        /// url</param>
-        public TemporaryUploadLocation(string url = default(string), System.DateTime? expirationTime = default(System.DateTime?))
+        /// <param name="url">The shared access signature (SAS) url for the
+        /// temporary blob storage</param>
+        /// <param name="expirationTime">The expiration time of the shared
+        /// access signature (SAS) url</param>
+        public TemporaryUploadLocation(string url, System.DateTime expirationTime)
         {
             Url = url;
             ExpirationTime = expirationTime;
@@ -42,16 +43,31 @@ namespace SceneSkope.PowerBI.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets the SAS url for the temporary blob storage
+        /// Gets or sets the shared access signature (SAS) url for the
+        /// temporary blob storage
         /// </summary>
         [JsonProperty(PropertyName = "Url")]
         public string Url { get; set; }
 
         /// <summary>
-        /// Gets or sets the expiration time of the SAS url
+        /// Gets or sets the expiration time of the shared access signature
+        /// (SAS) url
         /// </summary>
         [JsonProperty(PropertyName = "ExpirationTime")]
-        public System.DateTime? ExpirationTime { get; set; }
+        public System.DateTime ExpirationTime { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (Url == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "Url");
+            }
+        }
     }
 }

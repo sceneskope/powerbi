@@ -27,19 +27,17 @@ namespace EmbedInformation
                 }
                 else
                 {
-                    using (var cts = new CancellationTokenSource())
-                    {
-                        Console.CancelKeyPress += (_, a) =>
-                        {
-                            a.Cancel = true;
-                            cts.Cancel();
-                        };
+                    using var cts = new CancellationTokenSource();
+                    Console.CancelKeyPress += (_, a) =>
+{
+    a.Cancel = true;
+    cts.Cancel();
+};
 
-                        ServiceClientTracing.IsEnabled = true;
-                        ServiceClientTracing.AddTracingInterceptor(new ConsoleTracingInterceptor());
+                    ServiceClientTracing.IsEnabled = true;
+                    ServiceClientTracing.AddTracingInterceptor(new ConsoleTracingInterceptor());
 
-                        RunAsync(arguments, cts.Token).GetAwaiter().GetResult();
-                    }
+                    RunAsync(arguments, cts.Token).GetAwaiter().GetResult();
                 }
             }
             catch (Exception ex)
@@ -69,11 +67,11 @@ namespace EmbedInformation
                                 (url, deviceCode) => Console.WriteLine($"Go to {url} and enter device code {deviceCode}"));
             }
 
-            var powerBIClient = new PowerBIClient(new TokenCredentials(tokenProvider));
+            using var powerBIClient = new PowerBIClient(new TokenCredentials(tokenProvider));
 
             if (arguments.ListGroups)
             {
-                var groups = await powerBIClient.Groups.GetGroupsAsync(ct).ConfigureAwait(false);
+                var groups = await powerBIClient.Groups.GetGroupsAsync(cancellationToken: ct).ConfigureAwait(false);
                 Console.WriteLine($"Got {groups.Value.Count} groups");
                 foreach (var group in groups.Value)
                 {
@@ -81,7 +79,7 @@ namespace EmbedInformation
                 }
             }
 
-            var noGroup = string.IsNullOrWhiteSpace(arguments.GroupId);
+            var noGroup = string.IsNullOrWhiteSpace(arguments.Group);
 
             if (arguments.ListDatasets)
             {
@@ -123,27 +121,28 @@ namespace EmbedInformation
                 }
             }
 
-            if (arguments.EmbedToken && !string.IsNullOrWhiteSpace(arguments.ReportId))
+            if (arguments.EmbedToken && !string.IsNullOrWhiteSpace(arguments.Report) && !noGroup)
             {
                 var report = await (noGroup ? powerBIClient.Reports.GetReportAsync(arguments.ReportId, ct) : powerBIClient.Reports.GetReportInGroupAsync(arguments.GroupId, arguments.ReportId, ct)).ConfigureAwait(false);
                 Console.WriteLine($"Report: {JsonConvert.SerializeObject(report)}");
-                var request = new GenerateTokenRequest { AccessLevel = "View" };
-                var token = await (noGroup ? powerBIClient.Reports.GenerateTokenAsync(arguments.ReportId, request, ct) : powerBIClient.Reports.GenerateTokenInGroupAsync(arguments.GroupId, arguments.ReportId, request, ct)).ConfigureAwait(false);
+                var request = new GenerateTokenRequest { AccessLevel = TokenAccessLevel.View };
+                var token = await powerBIClient.Reports.GenerateTokenInGroupAsync(arguments.GroupId, arguments.ReportId, request, ct).ConfigureAwait(false);
                 Console.WriteLine($"Report token: {JsonConvert.SerializeObject(token)}");
             }
 
-            if (arguments.EmbedToken && !string.IsNullOrWhiteSpace(arguments.TileId) && !string.IsNullOrWhiteSpace(arguments.DashboardId))
+            if (arguments.EmbedToken && !string.IsNullOrWhiteSpace(arguments.Tile) && !string.IsNullOrWhiteSpace(arguments.Dashboard) && !noGroup)
             {
                 var tile = await (noGroup ? powerBIClient.Dashboards.GetTileAsync(arguments.DashboardId, arguments.TileId, ct) : powerBIClient.Dashboards.GetTileInGroupAsync(arguments.GroupId, arguments.DashboardId, arguments.TileId, ct)).ConfigureAwait(false);
                 Console.WriteLine($"Tile: {JsonConvert.SerializeObject(tile)}");
-                var request = new GenerateTokenRequest { AccessLevel = "View" };
-                var token = await (noGroup ? powerBIClient.Dashboards.GenerateTokenAsync(arguments.DashboardId, request, ct) : powerBIClient.Dashboards.GenerateTokenInGroupAsync(arguments.GroupId, arguments.DashboardId, request, ct)).ConfigureAwait(false);
+                var request = new GenerateTokenRequest { AccessLevel = TokenAccessLevel.View };
+                var token = await powerBIClient.Dashboards.GenerateTokenInGroupAsync(arguments.GroupId, arguments.DashboardId, request, ct).ConfigureAwait(false);
                 Console.WriteLine($"Dashboard Token: {JsonConvert.SerializeObject(token)}");
-                token = await (noGroup ? powerBIClient.Tiles.GenerateTokenAsync(arguments.DashboardId, arguments.TileId, request, ct) : powerBIClient.Tiles.GenerateTokenInGroupAsync(arguments.GroupId, arguments.DashboardId, arguments.TileId, request, ct)).ConfigureAwait(false);
+                token = await powerBIClient.Tiles.GenerateTokenInGroupAsync(arguments.GroupId, arguments.DashboardId, arguments.TileId, request, ct).ConfigureAwait(false);
                 Console.WriteLine($"Tile Token: {JsonConvert.SerializeObject(token)}");
             }
 
-            if (arguments.GetParameters && !string.IsNullOrWhiteSpace(arguments.DatasetId)) {
+            if (arguments.GetParameters && !string.IsNullOrWhiteSpace(arguments.DatasetId))
+            {
                 var parameters = await (noGroup ? powerBIClient.Datasets.GetParametersAsync(arguments.DatasetId, ct) : powerBIClient.Datasets.GetParametersInGroupAsync(arguments.GroupId, arguments.DatasetId, ct)).ConfigureAwait(false);
                 Console.WriteLine($"Parameters: {JsonConvert.SerializeObject(parameters)}");
             }

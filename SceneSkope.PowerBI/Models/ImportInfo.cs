@@ -10,7 +10,7 @@ namespace SceneSkope.PowerBI.Models
     using System.Linq;
 
     /// <summary>
-    /// The import info
+    /// The information about the import
     /// </summary>
     public partial class ImportInfo
     {
@@ -25,11 +25,16 @@ namespace SceneSkope.PowerBI.Models
         /// <summary>
         /// Initializes a new instance of the ImportInfo class.
         /// </summary>
-        /// <param name="filePath">The file path to import</param>
-        /// <param name="connectionType">The import connection type</param>
-        /// <param name="fileUrl">The SAS url of the temporary blob
-        /// storage</param>
-        public ImportInfo(string filePath = default(string), string connectionType = default(string), string fileUrl = default(string))
+        /// <param name="filePath">The OneDrive for Business .xlsx file path to
+        /// import, can be absolute or relative. .pbix files are not
+        /// supported.</param>
+        /// <param name="connectionType">The import connection type for
+        /// OneDrive for Business file. Possible values include: 'import',
+        /// 'connect'</param>
+        /// <param name="fileUrl">The shared access signature (SAS) url of the
+        /// temporary blob storage, used to import large .pbix files between 1
+        /// GB and 10 GB</param>
+        public ImportInfo(string filePath = default(string), ConnectionType? connectionType = default(ConnectionType?), string fileUrl = default(string))
         {
             FilePath = filePath;
             ConnectionType = connectionType;
@@ -43,19 +48,23 @@ namespace SceneSkope.PowerBI.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets the file path to import
+        /// Gets or sets the OneDrive for Business .xlsx file path to import,
+        /// can be absolute or relative. .pbix files are not supported.
         /// </summary>
         [JsonProperty(PropertyName = "filePath")]
         public string FilePath { get; set; }
 
         /// <summary>
-        /// Gets or sets the import connection type
+        /// Gets or sets the import connection type for OneDrive for Business
+        /// file. Possible values include: 'import', 'connect'
         /// </summary>
         [JsonProperty(PropertyName = "connectionType")]
-        public string ConnectionType { get; set; }
+        public ConnectionType? ConnectionType { get; set; }
 
         /// <summary>
-        /// Gets or sets the SAS url of the temporary blob storage
+        /// Gets or sets the shared access signature (SAS) url of the temporary
+        /// blob storage, used to import large .pbix files between 1 GB and 10
+        /// GB
         /// </summary>
         [JsonProperty(PropertyName = "fileUrl")]
         public string FileUrl { get; set; }

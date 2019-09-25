@@ -6,11 +6,12 @@
 
 namespace SceneSkope.PowerBI.Models
 {
+    using Microsoft.Rest;
     using Newtonsoft.Json;
     using System.Linq;
 
     /// <summary>
-    /// Power BI Create a new group Request
+    /// Power BI create a new group request
     /// </summary>
     public partial class GroupCreationRequest
     {
@@ -25,8 +26,8 @@ namespace SceneSkope.PowerBI.Models
         /// <summary>
         /// Initializes a new instance of the GroupCreationRequest class.
         /// </summary>
-        /// <param name="name">The name of the new created group.</param>
-        public GroupCreationRequest(string name = default(string))
+        /// <param name="name">The name of the newly created group</param>
+        public GroupCreationRequest(string name)
         {
             Name = name;
             CustomInit();
@@ -38,10 +39,23 @@ namespace SceneSkope.PowerBI.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets the name of the new created group.
+        /// Gets or sets the name of the newly created group
         /// </summary>
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (Name == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "Name");
+            }
+        }
     }
 }

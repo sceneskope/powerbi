@@ -37,44 +37,74 @@ namespace SceneSkope.PowerBI
 
 
         /// <summary>
-        /// Gets the IDatasets.
+        /// Gets the IDatasetsOperations.
         /// </summary>
-        IDatasets Datasets { get; }
+        IDatasetsOperations Datasets { get; }
 
         /// <summary>
-        /// Gets the IImports.
+        /// Gets the IUsers.
         /// </summary>
-        IImports Imports { get; }
+        IUsers Users { get; }
 
         /// <summary>
-        /// Gets the IReports.
+        /// Gets the IImportsOperations.
         /// </summary>
-        IReports Reports { get; }
+        IImportsOperations Imports { get; }
 
         /// <summary>
-        /// Gets the IDashboards.
+        /// Gets the IReportsOperations.
         /// </summary>
-        IDashboards Dashboards { get; }
+        IReportsOperations Reports { get; }
 
         /// <summary>
-        /// Gets the ITiles.
+        /// Gets the IDashboardsOperations.
         /// </summary>
-        ITiles Tiles { get; }
+        IDashboardsOperations Dashboards { get; }
 
         /// <summary>
-        /// Gets the IGateways.
+        /// Gets the ITilesOperations.
         /// </summary>
-        IGateways Gateways { get; }
+        ITilesOperations Tiles { get; }
 
         /// <summary>
-        /// Gets the IGroups.
+        /// Gets the IAppsOperations.
         /// </summary>
-        IGroups Groups { get; }
+        IAppsOperations Apps { get; }
 
         /// <summary>
-        /// Gets the ICapacities.
+        /// Gets the IDataflowsOperations.
         /// </summary>
-        ICapacities Capacities { get; }
+        IDataflowsOperations Dataflows { get; }
+
+        /// <summary>
+        /// Gets the IGatewaysOperations.
+        /// </summary>
+        IGatewaysOperations Gateways { get; }
+
+        /// <summary>
+        /// Gets the IGroupsOperations.
+        /// </summary>
+        IGroupsOperations Groups { get; }
+
+        /// <summary>
+        /// Gets the ICapacitiesOperations.
+        /// </summary>
+        ICapacitiesOperations Capacities { get; }
+
+        /// <summary>
+        /// Gets the IAvailableFeaturesOperations.
+        /// </summary>
+        IAvailableFeaturesOperations AvailableFeatures { get; }
+
+        /// <summary>
+        /// Gets the IDataflowStorageAccountsOperations.
+        /// </summary>
+        IDataflowStorageAccountsOperations DataflowStorageAccounts { get; }
+
+        /// <summary>
+        /// Gets the IAdmin.
+        /// </summary>
+        IAdmin Admin { get; }
 
     }
 }

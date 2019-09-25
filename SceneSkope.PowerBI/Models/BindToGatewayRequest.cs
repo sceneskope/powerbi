@@ -7,10 +7,12 @@
 namespace SceneSkope.PowerBI.Models
 {
     using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
-    /// The Bind dataset to gateway request
+    /// The bind dataset to gateway request
     /// </summary>
     public partial class BindToGatewayRequest
     {
@@ -26,9 +28,12 @@ namespace SceneSkope.PowerBI.Models
         /// Initializes a new instance of the BindToGatewayRequest class.
         /// </summary>
         /// <param name="gatewayObjectId">The gateway id</param>
-        public BindToGatewayRequest(string gatewayObjectId = default(string))
+        /// <param name="datasourceObjectIds">datasourceObjectIds belonging to
+        /// the gateway</param>
+        public BindToGatewayRequest(System.Guid gatewayObjectId, IList<System.Guid?> datasourceObjectIds = default(IList<System.Guid?>))
         {
             GatewayObjectId = gatewayObjectId;
+            DatasourceObjectIds = datasourceObjectIds;
             CustomInit();
         }
 
@@ -41,7 +46,22 @@ namespace SceneSkope.PowerBI.Models
         /// Gets or sets the gateway id
         /// </summary>
         [JsonProperty(PropertyName = "gatewayObjectId")]
-        public string GatewayObjectId { get; set; }
+        public System.Guid GatewayObjectId { get; set; }
 
+        /// <summary>
+        /// Gets or sets datasourceObjectIds belonging to the gateway
+        /// </summary>
+        [JsonProperty(PropertyName = "datasourceObjectIds")]
+        public IList<System.Guid?> DatasourceObjectIds { get; set; }
+
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+        }
     }
 }

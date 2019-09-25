@@ -6,13 +6,57 @@
 
 namespace SceneSkope.PowerBI.Models
 {
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+    using System.Runtime;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// Defines values for DefaultRetentionPolicy.
     /// </summary>
-    public static class DefaultRetentionPolicy
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum DefaultRetentionPolicy
     {
-        public const string None = "None";
-        public const string BasicFIFO = "basicFIFO";
+        /// <summary>
+        /// None
+        /// </summary>
+        [EnumMember(Value = "None")]
+        None,
+        /// <summary>
+        /// basicFIFO
+        /// </summary>
+        [EnumMember(Value = "basicFIFO")]
+        BasicFIFO
+    }
+    internal static class DefaultRetentionPolicyEnumExtension
+    {
+        internal static string ToSerializedValue(this DefaultRetentionPolicy? value)
+        {
+            return value == null ? null : ((DefaultRetentionPolicy)value).ToSerializedValue();
+        }
+
+        internal static string ToSerializedValue(this DefaultRetentionPolicy value)
+        {
+            switch( value )
+            {
+                case DefaultRetentionPolicy.None:
+                    return "None";
+                case DefaultRetentionPolicy.BasicFIFO:
+                    return "basicFIFO";
+            }
+            return null;
+        }
+
+        internal static DefaultRetentionPolicy? ParseDefaultRetentionPolicy(this string value)
+        {
+            switch( value )
+            {
+                case "None":
+                    return DefaultRetentionPolicy.None;
+                case "basicFIFO":
+                    return DefaultRetentionPolicy.BasicFIFO;
+            }
+            return null;
+        }
     }
 }

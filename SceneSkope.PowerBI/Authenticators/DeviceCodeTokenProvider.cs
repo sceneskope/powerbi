@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Identity.Client;
 
 namespace SceneSkope.PowerBI.Authenticators
 {
@@ -24,9 +24,12 @@ namespace SceneSkope.PowerBI.Authenticators
 
         protected override async Task<AuthenticationResult> InitialGetAccessCodeAsync(CancellationToken ct)
         {
-            var codeResult = await AuthenticationContext.AcquireDeviceCodeAsync(ResourceUri, ClientId).ConfigureAwait(false);
-            _notifyDeviceCodeRequest(codeResult.VerificationUrl, codeResult.UserCode);
-            return await AuthenticationContext.AcquireTokenByDeviceCodeAsync(codeResult).ConfigureAwait(false);
+            var codeResult = await App.AcquireTokenWithDeviceCode(Scopes, dcr =>
+            {
+                _notifyDeviceCodeRequest(dcr.VerificationUrl, dcr.UserCode);
+                return Task.CompletedTask;
+            }).ExecuteAsync(ct).ConfigureAwait(false);
+            return codeResult;
         }
     }
 }

@@ -8,12 +8,10 @@ namespace SceneSkope.PowerBI.Models
 {
     using Microsoft.Rest;
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
-    /// A Power BI Dataset
+    /// A Power BI dataset
     /// </summary>
     public partial class Dataset
     {
@@ -28,45 +26,33 @@ namespace SceneSkope.PowerBI.Models
         /// <summary>
         /// Initializes a new instance of the Dataset class.
         /// </summary>
-        /// <param name="name">The dataset name</param>
-        /// <param name="tables">The dataset tables</param>
         /// <param name="id">The dataset id</param>
+        /// <param name="name">The dataset name</param>
         /// <param name="configuredBy">The dataset owner</param>
-        /// <param name="defaultRetentionPolicy">The dataset default data
-        /// retention policy. Possible values include: 'None',
-        /// 'basicFIFO'</param>
-        /// <param name="addRowsAPIEnabled">Is Push Dataset</param>
+        /// <param name="addRowsAPIEnabled">Whether dataset allows adding new
+        /// rows</param>
         /// <param name="webUrl">The dataset web url</param>
-        /// <param name="datasources">The datasources associated with this
-        /// dataset</param>
-        /// <param name="defaultMode">The dataset mode or type. Possible values
-        /// include: 'AsAzure', 'AsOnPrem', 'Push', 'Streaming',
-        /// 'PushStreaming'</param>
         /// <param name="isRefreshable">Can this dataset be refreshed</param>
         /// <param name="isEffectiveIdentityRequired">Dataset requires
         /// effective identity</param>
         /// <param name="isEffectiveIdentityRolesRequired">Dataset requires
         /// roles</param>
-        /// <param name="isOnPremGatewayRequired">Dataset requires onprem
-        /// gateway</param>
-        /// <param name="relationships">Collection of relationships between
-        /// tables</param>
-        public Dataset(string name, IList<Table> tables, string id = default(string), string configuredBy = default(string), string defaultRetentionPolicy = default(string), bool? addRowsAPIEnabled = default(bool?), string webUrl = default(string), IList<Datasource> datasources = default(IList<Datasource>), string defaultMode = default(string), bool? isRefreshable = default(bool?), bool? isEffectiveIdentityRequired = default(bool?), bool? isEffectiveIdentityRolesRequired = default(bool?), bool? isOnPremGatewayRequired = default(bool?), IList<Relationship> relationships = default(IList<Relationship>))
+        /// <param name="isOnPremGatewayRequired">Dataset requires an
+        /// On-premises Data Gateway</param>
+        /// <param name="encryption">The dataset encryption information (Only
+        /// applicable when $expand is specified)</param>
+        public Dataset(string id, string name = default(string), string configuredBy = default(string), bool? addRowsAPIEnabled = default(bool?), string webUrl = default(string), bool? isRefreshable = default(bool?), bool? isEffectiveIdentityRequired = default(bool?), bool? isEffectiveIdentityRolesRequired = default(bool?), bool? isOnPremGatewayRequired = default(bool?), Encryption encryption = default(Encryption))
         {
             Id = id;
             Name = name;
             ConfiguredBy = configuredBy;
-            DefaultRetentionPolicy = defaultRetentionPolicy;
             AddRowsAPIEnabled = addRowsAPIEnabled;
-            Tables = tables;
             WebUrl = webUrl;
-            Datasources = datasources;
-            DefaultMode = defaultMode;
             IsRefreshable = isRefreshable;
             IsEffectiveIdentityRequired = isEffectiveIdentityRequired;
             IsEffectiveIdentityRolesRequired = isEffectiveIdentityRolesRequired;
             IsOnPremGatewayRequired = isOnPremGatewayRequired;
-            Relationships = relationships;
+            Encryption = encryption;
             CustomInit();
         }
 
@@ -94,42 +80,16 @@ namespace SceneSkope.PowerBI.Models
         public string ConfiguredBy { get; set; }
 
         /// <summary>
-        /// Gets or sets the dataset default data retention policy. Possible
-        /// values include: 'None', 'basicFIFO'
-        /// </summary>
-        [JsonProperty(PropertyName = "defaultRetentionPolicy")]
-        public string DefaultRetentionPolicy { get; set; }
-
-        /// <summary>
-        /// Gets or sets is Push Dataset
+        /// Gets or sets whether dataset allows adding new rows
         /// </summary>
         [JsonProperty(PropertyName = "addRowsAPIEnabled")]
         public bool? AddRowsAPIEnabled { get; set; }
-
-        /// <summary>
-        /// Gets or sets the dataset tables
-        /// </summary>
-        [JsonProperty(PropertyName = "tables")]
-        public IList<Table> Tables { get; set; }
 
         /// <summary>
         /// Gets or sets the dataset web url
         /// </summary>
         [JsonProperty(PropertyName = "webUrl")]
         public string WebUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets the datasources associated with this dataset
-        /// </summary>
-        [JsonProperty(PropertyName = "datasources")]
-        public IList<Datasource> Datasources { get; set; }
-
-        /// <summary>
-        /// Gets or sets the dataset mode or type. Possible values include:
-        /// 'AsAzure', 'AsOnPrem', 'Push', 'Streaming', 'PushStreaming'
-        /// </summary>
-        [JsonProperty(PropertyName = "defaultMode")]
-        public string DefaultMode { get; set; }
 
         /// <summary>
         /// Gets or sets can this dataset be refreshed
@@ -150,16 +110,17 @@ namespace SceneSkope.PowerBI.Models
         public bool? IsEffectiveIdentityRolesRequired { get; set; }
 
         /// <summary>
-        /// Gets or sets dataset requires onprem gateway
+        /// Gets or sets dataset requires an On-premises Data Gateway
         /// </summary>
         [JsonProperty(PropertyName = "IsOnPremGatewayRequired")]
         public bool? IsOnPremGatewayRequired { get; set; }
 
         /// <summary>
-        /// Gets or sets collection of relationships between tables
+        /// Gets or sets the dataset encryption information (Only applicable
+        /// when $expand is specified)
         /// </summary>
-        [JsonProperty(PropertyName = "relationships")]
-        public IList<Relationship> Relationships { get; set; }
+        [JsonProperty(PropertyName = "Encryption")]
+        public Encryption Encryption { get; set; }
 
         /// <summary>
         /// Validate the object.
@@ -169,33 +130,9 @@ namespace SceneSkope.PowerBI.Models
         /// </exception>
         public virtual void Validate()
         {
-            if (Name == null)
+            if (Id == null)
             {
-                throw new ValidationException(ValidationRules.CannotBeNull, "Name");
-            }
-            if (Tables == null)
-            {
-                throw new ValidationException(ValidationRules.CannotBeNull, "Tables");
-            }
-            if (Tables != null)
-            {
-                foreach (var element in Tables)
-                {
-                    if (element != null)
-                    {
-                        element.Validate();
-                    }
-                }
-            }
-            if (Relationships != null)
-            {
-                foreach (var element1 in Relationships)
-                {
-                    if (element1 != null)
-                    {
-                        element1.Validate();
-                    }
-                }
+                throw new ValidationException(ValidationRules.CannotBeNull, "Id");
             }
         }
     }

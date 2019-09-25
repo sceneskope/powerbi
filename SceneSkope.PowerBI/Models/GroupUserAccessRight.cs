@@ -7,52 +7,74 @@
 namespace SceneSkope.PowerBI.Models
 {
     using Newtonsoft.Json;
-    using System.Linq;
+    using Newtonsoft.Json.Converters;
+    using System.Runtime;
+    using System.Runtime.Serialization;
 
     /// <summary>
-    /// A Power BI user Access Right entry for group
+    /// Defines values for GroupUserAccessRight.
     /// </summary>
-    public partial class GroupUserAccessRight
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum GroupUserAccessRight
     {
         /// <summary>
-        /// Initializes a new instance of the GroupUserAccessRight class.
+        /// Removes permission to content in workspace
         /// </summary>
-        public GroupUserAccessRight()
+        [EnumMember(Value = "None")]
+        None,
+        /// <summary>
+        /// Grants read access to content in workspace
+        /// </summary>
+        [EnumMember(Value = "Member")]
+        Member,
+        /// <summary>
+        /// Grants administrator rights to workspace
+        /// </summary>
+        [EnumMember(Value = "Admin")]
+        Admin,
+        /// <summary>
+        /// Grants read and write access to content in group
+        /// </summary>
+        [EnumMember(Value = "Contributor")]
+        Contributor
+    }
+    internal static class GroupUserAccessRightEnumExtension
+    {
+        internal static string ToSerializedValue(this GroupUserAccessRight? value)
         {
-            CustomInit();
+            return value == null ? null : ((GroupUserAccessRight)value).ToSerializedValue();
         }
 
-        /// <summary>
-        /// Initializes a new instance of the GroupUserAccessRight class.
-        /// </summary>
-        /// <param name="groupUserAccessRightProperty">Access rights user has
-        /// for group. Possible values include: 'None', 'Member',
-        /// 'Admin'</param>
-        /// <param name="emailAddress">Email address of the user.</param>
-        public GroupUserAccessRight(string groupUserAccessRightProperty = default(string), string emailAddress = default(string))
+        internal static string ToSerializedValue(this GroupUserAccessRight value)
         {
-            GroupUserAccessRightProperty = groupUserAccessRightProperty;
-            EmailAddress = emailAddress;
-            CustomInit();
+            switch( value )
+            {
+                case GroupUserAccessRight.None:
+                    return "None";
+                case GroupUserAccessRight.Member:
+                    return "Member";
+                case GroupUserAccessRight.Admin:
+                    return "Admin";
+                case GroupUserAccessRight.Contributor:
+                    return "Contributor";
+            }
+            return null;
         }
 
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// Gets or sets access rights user has for group. Possible values
-        /// include: 'None', 'Member', 'Admin'
-        /// </summary>
-        [JsonProperty(PropertyName = "groupUserAccessRight")]
-        public string GroupUserAccessRightProperty { get; set; }
-
-        /// <summary>
-        /// Gets or sets email address of the user.
-        /// </summary>
-        [JsonProperty(PropertyName = "emailAddress")]
-        public string EmailAddress { get; set; }
-
+        internal static GroupUserAccessRight? ParseGroupUserAccessRight(this string value)
+        {
+            switch( value )
+            {
+                case "None":
+                    return GroupUserAccessRight.None;
+                case "Member":
+                    return GroupUserAccessRight.Member;
+                case "Admin":
+                    return GroupUserAccessRight.Admin;
+                case "Contributor":
+                    return GroupUserAccessRight.Contributor;
+            }
+            return null;
+        }
     }
 }

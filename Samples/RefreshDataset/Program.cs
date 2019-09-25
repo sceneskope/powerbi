@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Rest;
@@ -27,16 +26,14 @@ namespace RefreshDataset
                 }
                 else
                 {
-                    using (var cts = new CancellationTokenSource())
+                    using var cts = new CancellationTokenSource();
+                    Console.CancelKeyPress += (_, a) =>
                     {
-                        Console.CancelKeyPress += (_, a) =>
-                        {
-                            a.Cancel = true;
-                            cts.Cancel();
-                        };
+                        a.Cancel = true;
+                        cts.Cancel();
+                    };
 
-                        RunAsync(arguments, cts.Token).GetAwaiter().GetResult();
-                    }
+                    RunAsync(arguments, cts.Token).GetAwaiter().GetResult();
                 }
             }
             catch (Exception ex)
@@ -71,23 +68,24 @@ namespace RefreshDataset
             }
 
             var credentials = new TokenCredentials(authenticator);
-            var powerBIClient = new PowerBIClient(credentials);
-
-            var hasGroup = !string.IsNullOrWhiteSpace(arguments.GroupId);
-
-            if (string.IsNullOrWhiteSpace(arguments.DatasetId))
+            using (var powerBIClient = new PowerBIClient(credentials))
             {
-                var datasets = await (hasGroup ? powerBIClient.Datasets.GetDatasetsAsync(ct) : powerBIClient.Datasets.GetDatasetsInGroupAsync(arguments.GroupId, ct)).ConfigureAwait(false);
-                foreach (var dataset in datasets.Value)
+                var hasGroup = !string.IsNullOrWhiteSpace(arguments.Group);
+
+                if (string.IsNullOrWhiteSpace(arguments.DatasetId))
                 {
-                    Console.WriteLine($"{dataset.Name} = {dataset.Id}");
+                    var datasets = await (hasGroup ? powerBIClient.Datasets.GetDatasetsAsync(ct) : powerBIClient.Datasets.GetDatasetsInGroupAsync(arguments.GroupId, ct)).ConfigureAwait(false);
+                    foreach (var dataset in datasets.Value)
+                    {
+                        Console.WriteLine($"{dataset.Name} = {dataset.Id}");
+                    }
                 }
-            }
-            else
-            {
-                Console.WriteLine("About to refresh the dataset");
-                await (hasGroup ? powerBIClient.Datasets.RefreshDatasetAsync(arguments.DatasetId, ct) : powerBIClient.Datasets.RefreshDatasetInGroupAsync(arguments.GroupId, arguments.DatasetId, ct)).ConfigureAwait(false);
-                Console.WriteLine("Refreshed the dataset");
+                else
+                {
+                    Console.WriteLine("About to refresh the dataset");
+                    await (hasGroup ? powerBIClient.Datasets.RefreshDatasetAsync(arguments.DatasetId, cancellationToken: ct) : powerBIClient.Datasets.RefreshDatasetInGroupAsync(arguments.GroupId, arguments.DatasetId, cancellationToken: ct)).ConfigureAwait(false);
+                    Console.WriteLine("Refreshed the dataset");
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(arguments.TokenFile))

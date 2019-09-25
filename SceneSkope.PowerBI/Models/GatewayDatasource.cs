@@ -25,16 +25,16 @@ namespace SceneSkope.PowerBI.Models
         /// <summary>
         /// Initializes a new instance of the GatewayDatasource class.
         /// </summary>
-        /// <param name="id">The unique id for this gateway datasource</param>
+        /// <param name="id">The unique id for this datasource</param>
         /// <param name="gatewayId">The associated gateway id</param>
-        /// <param name="datasourceName">The datasource name</param>
-        /// <param name="datasourceType">The datasource type</param>
-        /// <param name="connectionDetails">The datasource connection
-        /// details</param>
-        /// <param name="credentialType">The datasource credential type</param>
-        /// <param name="basicCredentials">The datasource basic
-        /// credential</param>
-        public GatewayDatasource(string id = default(string), string gatewayId = default(string), string datasourceName = default(string), string datasourceType = default(string), string connectionDetails = default(string), string credentialType = default(string), BasicCredentials basicCredentials = default(BasicCredentials))
+        /// <param name="credentialType">Type of the datasoruce credentials.
+        /// Possible values include: 'Basic', 'Windows', 'Anonymous', 'OAuth2',
+        /// 'Key'</param>
+        /// <param name="datasourceName">The name of the datasource</param>
+        /// <param name="datasourceType">The type of the datasource</param>
+        /// <param name="connectionDetails">Connection details in json
+        /// format</param>
+        public GatewayDatasource(System.Guid id, System.Guid gatewayId, CredentialType credentialType, string datasourceName = default(string), string datasourceType = default(string), string connectionDetails = default(string))
         {
             Id = id;
             GatewayId = gatewayId;
@@ -42,7 +42,6 @@ namespace SceneSkope.PowerBI.Models
             DatasourceType = datasourceType;
             ConnectionDetails = connectionDetails;
             CredentialType = credentialType;
-            BasicCredentials = basicCredentials;
             CustomInit();
         }
 
@@ -52,46 +51,50 @@ namespace SceneSkope.PowerBI.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets the unique id for this gateway datasource
+        /// Gets or sets the unique id for this datasource
         /// </summary>
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        public System.Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the associated gateway id
         /// </summary>
         [JsonProperty(PropertyName = "gatewayId")]
-        public string GatewayId { get; set; }
+        public System.Guid GatewayId { get; set; }
 
         /// <summary>
-        /// Gets or sets the datasource name
+        /// Gets or sets the name of the datasource
         /// </summary>
         [JsonProperty(PropertyName = "datasourceName")]
         public string DatasourceName { get; set; }
 
         /// <summary>
-        /// Gets or sets the datasource type
+        /// Gets or sets the type of the datasource
         /// </summary>
         [JsonProperty(PropertyName = "datasourceType")]
         public string DatasourceType { get; set; }
 
         /// <summary>
-        /// Gets or sets the datasource connection details
+        /// Gets or sets connection details in json format
         /// </summary>
         [JsonProperty(PropertyName = "connectionDetails")]
         public string ConnectionDetails { get; set; }
 
         /// <summary>
-        /// Gets or sets the datasource credential type
+        /// Gets or sets type of the datasoruce credentials. Possible values
+        /// include: 'Basic', 'Windows', 'Anonymous', 'OAuth2', 'Key'
         /// </summary>
         [JsonProperty(PropertyName = "credentialType")]
-        public string CredentialType { get; set; }
+        public CredentialType CredentialType { get; set; }
 
         /// <summary>
-        /// Gets or sets the datasource basic credential
+        /// Validate the object.
         /// </summary>
-        [JsonProperty(PropertyName = "basicCredentials")]
-        public BasicCredentials BasicCredentials { get; set; }
-
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace SceneSkope.PowerBI.Models
     using System.Linq;
 
     /// <summary>
-    /// A Power BI Report
+    /// A Power BI report
     /// </summary>
     public partial class Report
     {
@@ -30,7 +30,7 @@ namespace SceneSkope.PowerBI.Models
         /// <param name="webUrl">The report web url</param>
         /// <param name="embedUrl">The report embed url</param>
         /// <param name="datasetId">The dataset id</param>
-        public Report(string id = default(string), string name = default(string), string webUrl = default(string), string embedUrl = default(string), string datasetId = default(string))
+        public Report(System.Guid id, string name = default(string), string webUrl = default(string), string embedUrl = default(string), string datasetId = default(string))
         {
             Id = id;
             Name = name;
@@ -49,7 +49,7 @@ namespace SceneSkope.PowerBI.Models
         /// Gets or sets the report id
         /// </summary>
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        public System.Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the report name
@@ -75,5 +75,15 @@ namespace SceneSkope.PowerBI.Models
         [JsonProperty(PropertyName = "datasetId")]
         public string DatasetId { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="Microsoft.Rest.ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            //Nothing to validate
+        }
     }
 }

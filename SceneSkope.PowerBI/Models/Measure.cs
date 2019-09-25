@@ -10,6 +10,9 @@ namespace SceneSkope.PowerBI.Models
     using Newtonsoft.Json;
     using System.Linq;
 
+    /// <summary>
+    /// A Power BI measure
+    /// </summary>
     public partial class Measure
     {
         /// <summary>
@@ -23,17 +26,12 @@ namespace SceneSkope.PowerBI.Models
         /// <summary>
         /// Initializes a new instance of the Measure class.
         /// </summary>
-        /// <param name="name">Name of the measure</param>
-        /// <param name="expression">Valid DAX expression</param>
-        /// <param name="formatString">A string describing how the value should
-        /// be formatted when it is displayed</param>
-        /// <param name="isHidden">Is the columne hidden from view</param>
-        public Measure(string name, string expression, string formatString = default(string), bool? isHidden = default(bool?))
+        /// <param name="name">The measure name</param>
+        /// <param name="expression">A valid DAX expression</param>
+        public Measure(string name, string expression)
         {
             Name = name;
             Expression = expression;
-            FormatString = formatString;
-            IsHidden = isHidden;
             CustomInit();
         }
 
@@ -43,29 +41,16 @@ namespace SceneSkope.PowerBI.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets name of the measure
+        /// Gets or sets the measure name
         /// </summary>
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets valid DAX expression
+        /// Gets or sets a valid DAX expression
         /// </summary>
         [JsonProperty(PropertyName = "expression")]
         public string Expression { get; set; }
-
-        /// <summary>
-        /// Gets or sets a string describing how the value should be formatted
-        /// when it is displayed
-        /// </summary>
-        [JsonProperty(PropertyName = "formatString")]
-        public string FormatString { get; set; }
-
-        /// <summary>
-        /// Gets or sets is the columne hidden from view
-        /// </summary>
-        [JsonProperty(PropertyName = "isHidden")]
-        public bool? IsHidden { get; set; }
 
         /// <summary>
         /// Validate the object.
@@ -82,6 +67,13 @@ namespace SceneSkope.PowerBI.Models
             if (Expression == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "Expression");
+            }
+            if (Name != null)
+            {
+                if (!System.Text.RegularExpressions.Regex.IsMatch(Name, "^[\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\u10000-\\u10FFFF]+$"))
+                {
+                    throw new ValidationException(ValidationRules.Pattern, "Name", "^[\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\u10000-\\u10FFFF]+$");
+                }
             }
         }
     }

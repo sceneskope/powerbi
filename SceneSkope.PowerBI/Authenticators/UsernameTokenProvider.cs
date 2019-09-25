@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Identity.Client;
 
 namespace SceneSkope.PowerBI.Authenticators
 {
@@ -15,7 +15,7 @@ namespace SceneSkope.PowerBI.Authenticators
             Username = username;
         }
 
-        protected override Task<AuthenticationResult> InitialGetAccessCodeAsync(CancellationToken ct)
-            => AuthenticationContext.AcquireTokenAsync(ResourceUri, ClientId, new UserCredential(Username));
+        protected override Task<AuthenticationResult> InitialGetAccessCodeAsync(CancellationToken ct) =>
+            App.AcquireTokenInteractive(Scopes).ExecuteAsync(ct);
     }
 }

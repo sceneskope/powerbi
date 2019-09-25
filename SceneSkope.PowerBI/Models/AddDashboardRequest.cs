@@ -6,11 +6,12 @@
 
 namespace SceneSkope.PowerBI.Models
 {
+    using Microsoft.Rest;
     using Newtonsoft.Json;
     using System.Linq;
 
     /// <summary>
-    /// Power BI Add Dashboard Request
+    /// Power BI add dashboard request
     /// </summary>
     public partial class AddDashboardRequest
     {
@@ -26,7 +27,7 @@ namespace SceneSkope.PowerBI.Models
         /// Initializes a new instance of the AddDashboardRequest class.
         /// </summary>
         /// <param name="name">The name of the new dashboard</param>
-        public AddDashboardRequest(string name = default(string))
+        public AddDashboardRequest(string name)
         {
             Name = name;
             CustomInit();
@@ -43,5 +44,18 @@ namespace SceneSkope.PowerBI.Models
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (Name == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "Name");
+            }
+        }
     }
 }

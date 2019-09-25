@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using SceneSkope.PowerBI.Models;
@@ -25,9 +26,9 @@ namespace SceneSkope.PowerBI
         /// <param name='nameConflict'>
         /// Whether to overwrite dataset during conflicts
         /// </param>
-        public static Import PostImportWithFileInGroup(this IImports operations, string groupId, Stream fileStream, string datasetDisplayName = default, string nameConflict = default)
+        public static Import PostImportWithFileInGroup(this IImportsOperations operations, Guid? groupId, Stream fileStream, string datasetDisplayName = default, ImportConflictHandlerMode? nameConflict = default, bool? skipReport = default)
         {
-            return Task.Factory.StartNew(s => ((IImports)s).PostImportFileWithHttpMessage(groupId, fileStream, datasetDisplayName, nameConflict), operations, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult().Body;
+            return Task.Factory.StartNew(s => ((IImportsOperations)s).PostImportFileWithHttpMessage(groupId, fileStream, datasetDisplayName, nameConflict, skipReport), operations, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult().Body;
         }
 
         /// <summary>
@@ -51,12 +52,10 @@ namespace SceneSkope.PowerBI
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        public static async Task<Import> PostImportWithFileAsyncInGroup(this IImports operations, string groupId, Stream fileStream, string datasetDisplayName = default, string nameConflict = default, CancellationToken cancellationToken = default)
+        public static async Task<Import> PostImportWithFileInGroupAsync(this IImportsOperations operations, Guid? groupId, Stream fileStream, string datasetDisplayName = default, ImportConflictHandlerMode? nameConflict = default, bool? skipReport = default, CancellationToken cancellationToken = default)
         {
-            using (var _result = await operations.PostImportFileWithHttpMessage(groupId, fileStream, datasetDisplayName, nameConflict, null, cancellationToken).ConfigureAwait(false))
-            {
-                return _result.Body;
-            }
+            using var _result = await operations.PostImportFileWithHttpMessage(groupId, fileStream, datasetDisplayName, nameConflict, skipReport, null, cancellationToken).ConfigureAwait(false);
+            return _result.Body;
         }
 
         /// <summary>
@@ -74,9 +73,9 @@ namespace SceneSkope.PowerBI
         /// <param name='nameConflict'>
         /// Whether to overwrite dataset during conflicts
         /// </param>
-        public static Import PostImportWithFile(this IImports operations, Stream fileStream, string datasetDisplayName = default, string nameConflict = default)
+        public static Import PostImportWithFile(this IImportsOperations operations, Stream fileStream, string datasetDisplayName = default, ImportConflictHandlerMode? nameConflict = default, bool? skipReport = default)
         {
-            return Task.Factory.StartNew(s => ((IImports)s).PostImportFileWithHttpMessage(fileStream, datasetDisplayName, nameConflict), operations, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult().Body;
+            return Task.Factory.StartNew(s => ((IImportsOperations)s).PostImportFileWithHttpMessage(fileStream, datasetDisplayName, nameConflict, skipReport), operations, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default).Unwrap().GetAwaiter().GetResult().Body;
         }
 
         /// <summary>
@@ -97,12 +96,10 @@ namespace SceneSkope.PowerBI
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        public static async Task<Import> PostImportWithFileAsync(this IImports operations, Stream fileStream, string datasetDisplayName = default, string nameConflict = default, CancellationToken cancellationToken = default)
+        public static async Task<Import> PostImportWithFileAsync(this IImportsOperations operations, Stream fileStream, string datasetDisplayName = default, ImportConflictHandlerMode? nameConflict = default, bool? skipReport = default, CancellationToken cancellationToken = default)
         {
-            using (var _result = await operations.PostImportFileWithHttpMessage(fileStream, datasetDisplayName, nameConflict, null, cancellationToken).ConfigureAwait(false))
-            {
-                return _result.Body;
-            }
+            using var _result = await operations.PostImportFileWithHttpMessage(fileStream, datasetDisplayName, nameConflict, skipReport, null, cancellationToken).ConfigureAwait(false);
+            return _result.Body;
         }
     }
 }
